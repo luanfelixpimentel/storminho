@@ -1,4 +1,4 @@
-package com.storminho.uffs.test_things;
+package com.storminho.uffs.tests;
 
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.storm.topology.IRichSpout;
 import com.storminho.uffs.GlobalVariables;
 
-public class TestSpout implements IRichSpout {
+public class PairRankerTestSpout implements IRichSpout {
   private SpoutOutputCollector _collector;
   private BufferedReader reader;
 
@@ -22,7 +22,7 @@ public class TestSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader("/home/igorlemos/Downloads/storm-master/examples/storm-starter/src/main/java/com/microsoft/example/testing_things/pairvalidatortest.test"));
+      reader = new BufferedReader(new FileReader(GlobalVariables.filePath));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -50,6 +50,7 @@ public class TestSpout implements IRichSpout {
 
   @Override
   public void deactivate() {
+      System.out.println("\n\nDeactivating the topology\n\n");
       try {
           reader.close();
       } catch (IOException e) {

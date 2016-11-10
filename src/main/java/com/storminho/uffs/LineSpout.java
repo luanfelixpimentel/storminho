@@ -22,7 +22,7 @@ public class LineSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(GlobalVariables.getFilePath()));
+      reader = new BufferedReader(new FileReader(GlobalVariables.filePath));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

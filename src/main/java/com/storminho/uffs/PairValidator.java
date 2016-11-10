@@ -42,12 +42,12 @@ public class PairValidator extends BaseBasicBolt {
     @Override
 	public void execute(Tuple input, BasicOutputCollector collector) {
         Integer keyA = -2, valueA = -2;
-        boolean aHas = input.getString(0).contains(GlobalVariables.getDupToken());
-        String[] aSplit = input.getString(0).split(GlobalVariables.getIndexSplitToken());
+        boolean aHas = input.getString(0).contains(GlobalVariables.dupToken);
+        String[] aSplit = input.getString(0).split(GlobalVariables.indexSplitToken);
 
         Integer keyB = -2, valueB = -2;
-        boolean bHas = input.getString(1).contains(GlobalVariables.getDupToken());
-        String[] bSplit = input.getString(1).split(GlobalVariables.getIndexSplitToken());
+        boolean bHas = input.getString(1).contains(GlobalVariables.dupToken);
+        String[] bSplit = input.getString(1).split(GlobalVariables.indexSplitToken);
         System.out.println("[" + aSplit[1] + " " + bSplit[1] + "]\n");
         //if none of them has the dup subtoken, they does not share the same value
         if (aHas || bHas) {

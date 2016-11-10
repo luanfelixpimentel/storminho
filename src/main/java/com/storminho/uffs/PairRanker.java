@@ -34,8 +34,13 @@ public class PairRanker extends BaseBasicBolt {
     public void execute(Tuple tuple, BasicOutputCollector collector) {
         String tuple1[] = tuple.getString(0).split(GlobalVariables.splitChars);
         String tuple2[] = tuple.getString(1).split(GlobalVariables.splitChars);
-        System.out.println(tuple1, tuple2, "\n\n");
+        System.out.println(tuple2[0] + tuple1[0] + "\n\n");
+
+        //compiling teste
+        System.out.println("\n\n" + tuple1[GlobalVariables.fieldId] + tuple2[GlobalVariables.fieldId] + "\n\n");
+
         boolean checado = checaDuplicata(tuple1[GlobalVariables.fieldId], tuple2[GlobalVariables.fieldId]);
+
         String store = "";
 
         //Methods
@@ -49,47 +54,49 @@ public class PairRanker extends BaseBasicBolt {
         //zero values
         Float Vgram = null, Vle = null, Vjar = null, Vcos = null, Vjw = null;
 
-        for (int i = GlobalVariables.fieldId + 1; i < GlobalVariables.attributesNumber; i++) {
-            String att1 = tuple1[i];
-            String att2 = tuple2[i];
+        // for (int i = GlobalVariables.fieldId + 1; i < GlobalVariables.attributesNumber; i++) {
+        //     String att1 = tuple1[i];
+        //     String att2 = tuple2[i];
 
-            //get the similarities values
-//            Vgram = ngram.getSimilarity(att1, att2);
-//            Vle = le.getSimilarity(att1, att2);
-//            Vjar = jc.getSimilarity(att1, att2);
-//            Vcos = cos.getSimilarity(att1, att2);
-//            Vjw = jw.getSimilarity(att1, att2);
-
-            if(Vgram!=Float.NaN && !Vgram.isNaN() && Vgram!=null) {
-                store=store+Vgram.toString()+", ";
-            } else {
-                store=store+0F+", ";
-            }
-            if(GlobalVariables.rankingMethods >= 2 && Vle!=Float.NaN && !Vle.isNaN() && Vle!=null) {
-                store=store+Vle.toString()+", ";
-            } else {
-                store=store+0F+", ";
-            }
-            if(GlobalVariables.rankingMethods >= 3 && Vjar!=Float.NaN && !Vjar.isNaN() && Vjar!=null) {
-                store=store+Vjar.toString()+", ";
-            } else {
-                store=store+0F+", ";
-            }
-            if(GlobalVariables.rankingMethods >=  4 && Vcos!=Float.NaN && !Vcos.isNaN() && Vcos!=null) {
-                store=store+Vcos.toString()+", ";
-            } else {
-                store=store+0F+", ";
-            }
-        }
-        ps.print(store);
-        ps.println(checado ? 1:0);
-        ps.flush();
+        // //get the similarities values
+        //    Vgram = ngram.getSimilarity(att1, att2);
+        //    Vle = le.getSimilarity(att1, att2);
+        //    Vjar = jc.getSimilarity(att1, att2);
+        //    Vcos = cos.getSimilarity(att1, att2);
+        //    Vjw = jw.getSimilarity(att1, att2);
+        //
+        //     if(Vgram!=Float.NaN && !Vgram.isNaN() && Vgram!=null) {
+        //         store=store+Vgram.toString()+", ";
+        //     } else {
+        //         store=store+0F+", ";
+        //     }
+        //     if(GlobalVariables.rankingMethods >= 2 && Vle!=Float.NaN && !Vle.isNaN() && Vle!=null) {
+        //         store=store+Vle.toString()+", ";
+        //     } else {
+        //         store=store+0F+", ";
+        //     }
+        //     if(GlobalVariables.rankingMethods >= 3 && Vjar!=Float.NaN && !Vjar.isNaN() && Vjar!=null) {
+        //         store=store+Vjar.toString()+", ";
+        //     } else {
+        //         store=store+0F+", ";
+        //     }
+        //     if(GlobalVariables.rankingMethods >=  4 && Vcos!=Float.NaN && !Vcos.isNaN() && Vcos!=null) {
+        //         store=store+Vcos.toString()+", ";
+        //     } else {
+        //         store=store+0F+", ";
+        //     }
+        // }
+        // ps.print(store);
+        // ps.println(checado ? 1:0);
+        // ps.flush();
     }
 
     private boolean checaDuplicata(String a, String b) {
         String aa[] = a.split(GlobalVariables.indexSplitToken);
         String bb[] = b.split(GlobalVariables.indexSplitToken);
-        return aa[GlobalVariables.fieldId] == bb[GlobalVariables.fieldId];
+
+        //access the number of the tuple
+        return aa[2] == bb[2];
     }
 
     @Override
