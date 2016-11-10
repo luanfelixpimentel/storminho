@@ -36,7 +36,7 @@ public class PairRankerTestSpout implements IRichSpout {
           if (line2 != null) {
               this._collector.emit(new Values(line, line2));
           } else {
-              Thread.sleep(10000);
+              Thread.sleep(1000);
           }
       } catch (Exception e) {
           e.printStackTrace();
