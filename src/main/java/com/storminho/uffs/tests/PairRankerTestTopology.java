@@ -16,7 +16,7 @@ public class PairRankerTestTopology {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("test-spout", new PairRankerTestSpout(), 5);
+    builder.setSpout("test-spout", new PairRankerTestSpout(), 1);
     builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("test-spout");
 
 

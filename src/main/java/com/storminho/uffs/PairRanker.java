@@ -21,19 +21,18 @@ import org.simmetrics.metrics.StringMetrics;
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
 public class PairRanker extends BaseBasicBolt {
-    PrintStream ps, ids;
+    private PrintStream ps, ids;
     private static int globalCounter;
 
     @Override
     public void prepare(Map map, TopologyContext context) {
         try {
             ps = new PrintStream(GlobalVariables.arffPath + "out" + globalCounter + ".arff");
-            ids = new PrintStream(GlobalVariables.arffPath + "ids" + globalCounter + ".out");
+            ids = new PrintStream(GlobalVariables.arffPath + "ids" + globalCounter++ + ".out");
             initializeArrfFile();
         } catch (IOException e) {
             System.out.println(e);
         }
-        globalCounter++;
     }
 
 
@@ -64,7 +63,7 @@ public class PairRanker extends BaseBasicBolt {
         boolean checado = checaDuplicata(tuple1[GlobalVariables.fieldId], tuple2[GlobalVariables.fieldId]);
 
         //print o id dos tuplas e se ela é ou não duplicata
-        ids.print(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
+        ids.println(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
 
         ps.print(store);
         ps.println(checado ? 1:0);
