@@ -27,5 +27,5 @@ public class GlobalVariables {
     * 8 - Levenshtein Similarity
     * Ex: public final static int rankingMethods = 2 + 8; means that Jaccard and Levenshtein gonna be used */
     public final static int rankingMethods = 1 + 8;
-    public final static String arffPath = System.getenv("STORMINHO") + "out.arff";
+    public final static String arffPath = System.getenv("STORMINHO");
 }
