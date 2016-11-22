@@ -39,6 +39,7 @@ public class PairRanker extends BaseBasicBolt {
     //write the simmetrics between two tuples in the .arff file
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
+        boolean checado = CorrectnessCounter.isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
         String tuple1[] = tuple.getString(0).split(GlobalVariables.splitChars);
         String tuple2[] = tuple.getString(1).split(GlobalVariables.splitChars);
         System.out.println(tuple2[0] + tuple1[0] + "\n\n");
@@ -59,11 +60,9 @@ public class PairRanker extends BaseBasicBolt {
             if ((16 & GlobalVariables.rankingMethods) != 0) store += qGramsDistanceSimilarity.compare(tuple1[i], tuple2[i]) + ",";
         }
 
-        //check if is really duplicata
-        boolean checado = checaDuplicata(tuple1[GlobalVariables.fieldId], tuple2[GlobalVariables.fieldId]);
-
         //print o id dos tuplas e se ela é ou não duplicata
-        ids.println(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
+        //ids.println(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
+        ids.println((checado ? 1:0));
 
         ps.print(store);
         ps.println(checado ? 1:0);
@@ -87,15 +86,6 @@ public class PairRanker extends BaseBasicBolt {
         }
         ps.print("@attribute isDuplicate numeric\n@data\n");
         ps.flush();
-    }
-
-    //check if two tuples share the same number id
-    private boolean checaDuplicata(String a, String b) {
-        String aa[] = a.split(GlobalVariables.indexSplitToken);
-        String bb[] = b.split(GlobalVariables.indexSplitToken);
-
-        //access the number of the tuple
-        return aa[1].equals(bb[1]);
     }
 
     @Override

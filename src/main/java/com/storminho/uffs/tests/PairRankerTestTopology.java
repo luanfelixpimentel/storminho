@@ -8,7 +8,6 @@ import org.apache.storm.tuple.Fields;
 
 import com.storminho.uffs.tests.PairRankerTestSpout;
 import com.storminho.uffs.PairRanker;
-import com.storminho.uffs.PairValidator;
 
 public class PairRankerTestTopology {
 
