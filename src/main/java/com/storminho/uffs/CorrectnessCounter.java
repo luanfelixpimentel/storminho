@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.HashSet;
 
 public class CorrectnessCounter {
     private static HashMap<Integer, Set> indexes = null;
@@ -43,7 +44,7 @@ public class CorrectnessCounter {
         return (Integer.parseInt(aSplit[1]).equals(Integer.parseInt(bSplit[1])));
     }
 
-    //this method will check duplicatas and edit the counters
+    //this method will check duplicatas and increase the counter if the pair haven't been proccessed yet
 	public void countDuplicatas(String tupleA, String tupleB) {
         Integer keyA = -2, valueA = -2;
         String[] aSplit = tupleA.split(GlobalVariables.indexSplitToken);
@@ -60,10 +61,9 @@ public class CorrectnessCounter {
             boolean flag = false;
             flag |= insertIntoIndexes(keyA, valueA);
             flag |= insertIntoIndexes(keyB, valueB);
-
         }
-        //if none of them has the dup subtoken, they do not share the same value
-            if (keyA.equals(keyB)) {
+
+        if (keyA.equals(keyB)) {
                 //if the methods call return true, that means the value we are inserting into hashmap did not exist there yet (at least one of them)
                 if (flag) dupCounter++;
             } else {
