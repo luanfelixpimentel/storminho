@@ -8,7 +8,6 @@ import org.apache.storm.tuple.Fields;
 
 import com.storminho.uffs.tests.PairRankerTestSpout;
 import com.storminho.uffs.PairRanker;
-import com.storminho.uffs.PairValidator;
 
 public class PairRankerTestTopology {
 
@@ -16,7 +15,7 @@ public class PairRankerTestTopology {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("test-spout", new PairRankerTestSpout(), 5);
+    builder.setSpout("test-spout", new PairRankerTestSpout(), 1);
     builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("test-spout");
 
 

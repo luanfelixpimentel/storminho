@@ -21,12 +21,14 @@ import org.simmetrics.metrics.StringMetrics;
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
 public class PairRanker extends BaseBasicBolt {
-    PrintStream ps;
+    private PrintStream ps, ids;
+    private static int globalCounter;
 
     @Override
     public void prepare(Map map, TopologyContext context) {
         try {
-            ps = new PrintStream(GlobalVariables.arffPath);
+            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + globalCounter + "ranks.arff");
+            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + globalCounter++ + "gabarito.out");
             initializeArrfFile();
         } catch (IOException e) {
             System.out.println(e);
@@ -37,12 +39,10 @@ public class PairRanker extends BaseBasicBolt {
     //write the simmetrics between two tuples in the .arff file
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
+        boolean checado = CorrectnessCounter.isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
         String tuple1[] = tuple.getString(0).split(GlobalVariables.splitChars);
         String tuple2[] = tuple.getString(1).split(GlobalVariables.splitChars);
         System.out.println(tuple2[0] + tuple1[0] + "\n\n");
-
-        boolean checado = checaDuplicata(tuple1[GlobalVariables.fieldId], tuple2[GlobalVariables.fieldId]);
-
         String store = "";
 
         //initialization
@@ -59,9 +59,15 @@ public class PairRanker extends BaseBasicBolt {
             if ((8 & GlobalVariables.rankingMethods) != 0) store += levenshteinSimilarity.compare(tuple1[i], tuple2[i]) + ",";
             if ((16 & GlobalVariables.rankingMethods) != 0) store += qGramsDistanceSimilarity.compare(tuple1[i], tuple2[i]) + ",";
         }
+
+        //print o id dos tuplas e se ela é ou não duplicata
+        //ids.println(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
+        ids.println((checado ? 1:0));
+
         ps.print(store);
         ps.println(checado ? 1:0);
         ps.flush();
+        ids.flush();
     }
 
     //Write "frame" for the .arff file
@@ -80,15 +86,6 @@ public class PairRanker extends BaseBasicBolt {
         }
         ps.print("@attribute isDuplicate numeric\n@data\n");
         ps.flush();
-    }
-
-    //check if two tuples share the same number id
-    private boolean checaDuplicata(String a, String b) {
-        String aa[] = a.split(GlobalVariables.indexSplitToken);
-        String bb[] = b.split(GlobalVariables.indexSplitToken);
-
-        //access the number of the tuple
-        return aa[1].equals(bb[1]);
     }
 
     @Override
