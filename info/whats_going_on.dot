@@ -1,0 +1,61 @@
+digraph projeto_topology {
+    node [style="filled"]
+    //files
+    {
+        node [shape="box" color="yellow"]
+        csv [label=".csv"]
+        arff [label=".arff"]
+        out [label="out.txt"]
+        gabarito [label="gabarito.txt"]
+    }
+    //spouts and bolts
+    {
+        node [shape="ellipse" color="green"]
+        linespout [label="Line Spout", comment="teste"]
+        splitsentence [label="SplitSentence"]
+        linesave [label="LineSave"]
+        indexsave [label="IndexSave"]
+        pairranker [label="PairRanker"]
+    }
+    //programas
+    {
+        node [shape="trapezium" color="orange"]
+        pairgenerator [label="PairGenerator"]
+        comparator [label="Comparator"]
+        correctnesscounter [label="CorrectnessCounter"]
+        arvore [label="Árvore"]
+    }
+
+    //outros
+    {
+        node [shape="diamond" color="black" fontcolor="white"]
+        redis [label="Redis"]
+    }
+
+    //ligações
+    {
+        csv -> linespout [label="[:id:x:x:...]\n[:id:x:x:...]\n[.]\n[.]\n[.]"]
+        linespout -> splitsentence [label="[:id:x:x:...]"]
+        linespout -> linesave [label="[:id:x:x:...]"]
+        linesave -> redis [label="[id][x:x:...]"]
+        splitsentence -> indexsave [label="[x][id]"]
+        indexsave -> redis[label="[x][id]"]
+        redis -> pairgenerator [label=""]
+        pairgenerator -> pairranker [label="[id:x:x:...][id:x:x:...]"]
+        pairranker -> arff [label="Similaridade"]
+        pairranker -> gabarito [label="[1 ou 0]\n[1 ou 0]\n[.]\n[.]\n[.]"]
+        arff -> arvore [label=""]
+        arvore -> out [label="[1 ou 0]\n[1 ou 0]\n[.]\n[.]\n[.]"]
+        out -> comparator [label=""]
+        gabarito -> comparator [label=""]
+
+    }
+
+    //ranks (posições)
+    {
+        {rank=same; splitsentence linesave}
+        {rank=same; arff gabarito}
+
+
+    }
+}

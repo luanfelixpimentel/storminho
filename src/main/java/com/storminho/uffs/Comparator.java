@@ -23,6 +23,6 @@ public class Comparator {
                 gabarito.close(); arvore.close();
             } catch (Exception e) { System.out.println(e); }
         }
-        System.out.println("Resultado:\n Falso-Positivos: " + fp + "\nFalso-Negativos: " + fn + "\nVerdadeiro-Positivos: " + vp + "\nVerdadeiro-Negativos: " + vn);
+        System.out.println("Resultado:\nFalso-Positivos: " + fp + "\nFalso-Negativos: " + fn + "\nVerdadeiro-Positivos: " + vp + "\nVerdadeiro-Negativos: " + vn);
     }
 }

@@ -7,8 +7,6 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
-import org.apache.storm.tuple.Values;
-import com.storminho.uffs.GlobalVariables;
 
 import java.io.PrintStream;
 import java.util.Map;
@@ -16,19 +14,23 @@ import org.apache.storm.task.TopologyContext;
 import java.io.IOException;
 import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.StringMetrics;
+import java.util.Random;
 
 //simetria
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
 public class PairRanker extends BaseBasicBolt {
     private PrintStream ps, ids;
-    private static int globalCounter;
 
     @Override
     public void prepare(Map map, TopologyContext context) {
+        Random rand = new Random();
+        long fileNumber = System.currentTimeMillis() - rand.nextLong();
         try {
-            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + globalCounter + "ranks.arff");
-            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + globalCounter++ + "gabarito.out");
+            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + fileNumber + "-ranks.arff");
+            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + fileNumber + "-gabarito.out");
+            // ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + globalCounter + "ranks.arff");
+            // ids = new PrintStream(GlobalVariables.projectPath + "/out/" + globalCounter++ + "gabarito.out");
             initializeArrfFile();
         } catch (IOException e) {
             System.out.println(e);
