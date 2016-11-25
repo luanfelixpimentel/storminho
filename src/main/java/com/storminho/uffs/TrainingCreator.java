@@ -17,17 +17,18 @@ import org.apache.storm.tuple.Fields;
 public class TrainingCreator extends BaseRichBolt implements IRichBolt {
     PrintStream ps;
     double ss;
-    int paresPositivos;
+    int paresPositivos, paresTotais;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         try {
-            ps = new PrintStream(Variables.csvPath + Variables.trainingOutputFile);
+            ps = new PrintStream(Variables.arffPath + Variables.trainingOutputFile);
         } catch (Exception e) {
             System.out.println(e);
         }
         ss = Variables.trainingSampleSize;
-        paresPositivos = 0;
+        paresPositivos = paresTotais = 0;
+        initializeArrfFile();
     }
 
     @Override
@@ -36,6 +37,8 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         int matchingInstances = (int)(ss * Variables.duplicatesTotal);
         double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
 
+        System.out.println(tuple.getString(0));
+        paresTotais++;
         if (tuple.getInteger(1).equals(1)) {
             if (random.nextDouble() < ss) { //ss = sample size
                 paresPositivos++;
@@ -49,13 +52,32 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         ps.flush();
     }
 
+    //Write "frame" for the .arff file
+    private void initializeArrfFile() {
+        int qtdMethods = 0;
+
+        //get the quantity of methods that gonna be used
+        for (int aux = Variables.rankingMethods; aux != 0; aux = aux >> 1) {
+            if ((1 & aux) != 0) qtdMethods++;
+        }
+
+        ps.print("@relation trainingSet\n");
+        int columns = (Variables.attributesNumber - (Variables.fieldId + 1)) * qtdMethods;
+        for (int i = 0; i < columns; i++) {
+            ps.print("@attribute att" + i + " numeric\n");
+        }
+        ps.print("@attribute isDuplicate numeric\n@data\n");
+        ps.flush();
+    }
+
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields());
     }
-    
+
     @Override
     public void cleanup() {
         ps.close();
+        System.out.println("\n\n\nPARES DUPLICADOS: " + paresPositivos + " PARES TOTAIS: " + paresTotais + "\n\n\n");
     }
 }
