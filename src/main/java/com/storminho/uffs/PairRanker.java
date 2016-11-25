@@ -24,11 +24,10 @@ public class PairRanker extends BaseBasicBolt {
 
     @Override
     public void prepare(Map map, TopologyContext context) {
-        Random rand = new Random();
-        long fileNumber = System.currentTimeMillis() - rand.nextLong();
+        // long fileNumber = System.currentTimeMillis() - rand.nextLong();
         try {
-            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + fileNumber + "-ranks.arff");
-            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + fileNumber + "-gabarito.out");
+            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + 0 + "-ranks.arff");
+            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + 0 + "-gabarito.out");
             // ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + globalCounter + "ranks.arff");
             // ids = new PrintStream(GlobalVariables.projectPath + "/out/" + globalCounter++ + "gabarito.out");
             initializeArrfFile();
