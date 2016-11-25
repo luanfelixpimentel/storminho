@@ -7,7 +7,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import com.storminho.uffs.GlobalVariables;
+import com.storminho.uffs.Variables;
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
 public class SplitSentence extends BaseBasicBolt {

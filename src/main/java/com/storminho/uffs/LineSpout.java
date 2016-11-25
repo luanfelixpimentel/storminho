@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.storm.topology.IRichSpout;
-import com.storminho.uffs.GlobalVariables;
+import com.storminho.uffs.Variables;
 
 public class LineSpout implements IRichSpout {
   private SpoutOutputCollector _collector;
@@ -22,7 +22,7 @@ public class LineSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(GlobalVariables.filePath));
+      reader = new BufferedReader(new FileReader(Variables.csvPath));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
