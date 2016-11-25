@@ -1,0 +1,2 @@
+#!/bin/bash
+dot -Tpng whats_going_on.dot > img.png; gnome-open img.png;

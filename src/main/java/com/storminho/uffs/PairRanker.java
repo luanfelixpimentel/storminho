@@ -1,100 +1,73 @@
 package com.storminho.uffs;
 
-import java.text.BreakIterator;
 
-import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.topology.IRichBolt;
+import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
-import org.apache.storm.tuple.Values;
-import com.storminho.uffs.GlobalVariables;
+import org.apache.storm.task.OutputCollector;
 
-import java.io.PrintStream;
 import java.util.Map;
 import org.apache.storm.task.TopologyContext;
-import java.io.IOException;
 import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.StringMetrics;
+import org.apache.storm.tuple.Values;
 
 //simetria
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
-public class PairRanker extends BaseBasicBolt {
-    private PrintStream ps, ids;
-    private static int globalCounter;
+public class PairRanker extends BaseRichBolt implements IRichBolt {
+    private StringMetric cosineSim, jaccardSim, jaroWinklerSim, levenshteinSim, qGramsDistanceSim;
+    private OutputCollector _collector;
 
     @Override
-    public void prepare(Map map, TopologyContext context) {
-        try {
-            ps = new PrintStream(GlobalVariables.projectPath + "/arff/" + globalCounter + "ranks.arff");
-            ids = new PrintStream(GlobalVariables.projectPath + "/out/" + globalCounter++ + "gabarito.out");
-            initializeArrfFile();
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+    public void prepare(Map map, TopologyContext context, OutputCollector c) {
+        cosineSim = StringMetrics.cosineSimilarity();
+        jaccardSim = StringMetrics.jaccard();
+        jaroWinklerSim = StringMetrics.jaroWinkler();
+        levenshteinSim = StringMetrics.levenshtein();
+        qGramsDistanceSim = StringMetrics.qGramsDistance();
+        _collector = c;
     }
 
-
-    //write the simmetrics between two tuples in the .arff file
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector collector) {
-        boolean checado = CorrectnessCounter.isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
-        String tuple1[] = tuple.getString(0).split(GlobalVariables.splitChars);
-        String tuple2[] = tuple.getString(1).split(GlobalVariables.splitChars);
-        System.out.println(tuple2[0] + tuple1[0] + "\n\n");
+    public void execute(Tuple tuple) {
+        boolean duplicata = isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
+        String tuple1[] = tuple.getString(0).split(Variables.splitChars);
+        String tuple2[] = tuple.getString(1).split(Variables.splitChars);
         String store = "";
 
-        //initialization
-        StringMetric cosineSimilarity = StringMetrics.cosineSimilarity();
-        StringMetric jaccardSimilarity = StringMetrics.jaccard();
-        StringMetric jaroWinklerSimilarity = StringMetrics.jaroWinkler();
-        StringMetric levenshteinSimilarity = StringMetrics.levenshtein();
-        StringMetric qGramsDistanceSimilarity = StringMetrics.qGramsDistance();
 
-        for (int i = GlobalVariables.fieldId + 1; i < GlobalVariables.attributesNumber; i++) {
-            if ((1 & GlobalVariables.rankingMethods) != 0) store += cosineSimilarity.compare(tuple1[i], tuple2[i]) + ",";
-            if ((2 & GlobalVariables.rankingMethods) != 0) store += jaccardSimilarity.compare(tuple1[i], tuple2[i]) + ",";
-            if ((4 & GlobalVariables.rankingMethods) != 0) store += jaroWinklerSimilarity.compare(tuple1[i], tuple2[i]) + ",";
-            if ((8 & GlobalVariables.rankingMethods) != 0) store += levenshteinSimilarity.compare(tuple1[i], tuple2[i]) + ",";
-            if ((16 & GlobalVariables.rankingMethods) != 0) store += qGramsDistanceSimilarity.compare(tuple1[i], tuple2[i]) + ",";
+        for (int i = Variables.fieldId + 1; i < GlobalVariables.attributesNumber; i++) {
+            boolean last = i == GlobalVariables.attributesNumber - 1;
+            if ((1 & Variables.rankingMethods) != 0) store += this.cosineSim.compare(tuple1[i], tuple2[i]) + ",";
+            if ((2 & Variables.rankingMethods) != 0) store += jaccardSim.compare(tuple1[i], tuple2[i]) + ",";
+            if ((4 & Variables.rankingMethods) != 0) store += jaroWinklerSim.compare(tuple1[i], tuple2[i]) + ",";
+            if ((8 & Variables.rankingMethods) != 0) store += levenshteinSim.compare(tuple1[i], tuple2[i]) + ",";
+            if ((16 & Variables.rankingMethods) != 0) store += qGramsDistanceSim.compare(tuple1[i], tuple2[i]) + (last ? "":",");
         }
 
-        //print o id dos tuplas e se ela é ou não duplicata
-        //ids.println(tuple1[GlobalVariables.fieldId] + "#" + tuple2[GlobalVariables.fieldId] + "#" + (checado ? 1:0));
-        ids.println((checado ? 1:0));
-
-        ps.print(store);
-        ps.println(checado ? 1:0);
-        ps.flush();
-        ids.flush();
+        // System.out.println(tuple2[1] + " # " + tuple1[1] + "\n" + store + " # " + duplicata); //just to see how things are going in terminal
+        _collector.emit(new Values(store, (duplicata ? 1:0)));
     }
 
-    //Write "frame" for the .arff file
-    private void initializeArrfFile() {
-        int qtdMethods = 0;
+    //this method only checks if two tuples are duplicatas according to the number in the first column
+    private static boolean isDuplicata(String tupleA, String tupleB) {
+        //split the tuples' indexes to separe the identifier
+        String[] aSplit = tupleA.split(Variables.indexSplitToken);
+        String[] bSplit = tupleB.split(Variables.indexSplitToken);
 
-        //get the quantity of methods that gonna be used
-        for (int aux = GlobalVariables.rankingMethods; aux != 0; aux = aux >> 1) {
-            if ((1 & aux) != 0) qtdMethods++;
-        }
-
-        ps.print("@relation simetria-tuplas\n");
-        int columns = (GlobalVariables.attributesNumber - (GlobalVariables.fieldId + 1)) * qtdMethods;
-        for (int i = 0; i < columns; i++) {
-            ps.print("@attribute att" + i + " numeric\n");
-        }
-        ps.print("@attribute isDuplicate numeric\n@data\n");
-        ps.flush();
+        //check if the identifier of both are equal
+        return (Integer.parseInt(aSplit[1]) == Integer.parseInt(bSplit[1]));
     }
 
     @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("word"));
+        declarer.declare(new Fields("similaridade", "resposta_certa"));
     }
 
     @Override
     public void cleanup() {
-        ps.close();
     }
 }
