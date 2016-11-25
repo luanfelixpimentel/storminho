@@ -17,10 +17,12 @@ public class GuilhermeTopology {
     TopologyBuilder builder = new TopologyBuilder();
 
     builder.setSpout("line-spout", new LineSpout(), 5);
+    builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
     builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
     builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
-
-
+ //   builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
+ //   builder.setBolt("pairRanker", new PairRanker(), 2).shuffleGrouping("pair-generator");
+            
     Config conf = new Config();
     conf.setDebug(false);
 
