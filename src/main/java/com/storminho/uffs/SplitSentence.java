@@ -15,8 +15,8 @@ public class SplitSentence extends BaseBasicBolt {
   //Execute is called to process tuples
   @Override
   public void execute(Tuple tuple, BasicOutputCollector collector) {
-    String[] allWords = tuple.getString(0).split(GlobalVariables.splitChars);
-    int idField = GlobalVariables.fieldId;
+    String[] allWords = tuple.getString(0).split(Variables.splitChars);
+    int idField = Variables.fieldId;
     //Send every word from the tuple to collector, except the id
     for (int i = idField + 1; i < allWords.length; i++) { //print all to test
         collector.emit(new Values(allWords[i], allWords[idField]));

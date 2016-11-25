@@ -10,8 +10,8 @@ digraph projeto_topology {
     //spouts and bolts
     {
         node [shape="ellipse" color="green"]
-        linespout [label="Line Spout", comment="teste"]
-        splitsentence [label="SplitSentence"]
+        linespout [label="Line Spout*", comment="teste"]
+        splitsentence [label="SplitSentence*"]
         linesave [label="LineSave"]
         indexsave [label="IndexSave"]
         pairranker [label="PairRanker"]
