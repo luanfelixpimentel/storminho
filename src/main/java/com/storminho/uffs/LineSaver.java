@@ -1,25 +1,18 @@
 package com.storminho.uffs;
 
-import java.util.List;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCommands;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisPubSub;
-import redis.clients.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
-import org.apache.storm.*;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 
 
@@ -47,7 +40,7 @@ public class LineSaver extends BaseBasicBolt{
     public void execute(Tuple tuple, BasicOutputCollector collector) {
     Jedis jedis = pool.getResource();
     JedisCommands jedisCommands = null;
-    //Jedis will store on database the Key (ex: rec-01234, and the rest of the string attached as line
+    //Jedis will store on database the Key (ex: rec-01234, and the rest of the string attached as list
     jedis.set(tuple.getString(0).split(Variables.splitChars)[Variables.fieldId], tuple.getString(0));
    }
 

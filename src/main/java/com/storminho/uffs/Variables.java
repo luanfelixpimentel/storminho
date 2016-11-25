@@ -16,7 +16,7 @@ public class Variables {
     //Which tuple's column holds the id field
     public static final int fieldId = 1;
     //how many columns does the csv have in total
-    public final static int attributesNumber = 12
+    public final static int attributesNumber = 12;
 
 
     /* TrainingCreator =======================================================*/
