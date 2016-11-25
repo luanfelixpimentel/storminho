@@ -5,11 +5,8 @@ import redis.clients.jedis.JedisCommands;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
@@ -18,13 +15,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 
 public class LineSaver extends BaseBasicBolt{
 
-    private HashMap<Object, Object> indexes;
     private JedisPool pool;
-
-    @Override
-    public void prepare(Map map, TopologyContext context) {
-        this.indexes = new HashMap<>();
-    }
     
     private void setupJedisPool() {
     JedisPoolConfig poolConfig = new JedisPoolConfig();
