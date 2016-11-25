@@ -20,7 +20,7 @@ digraph projeto_topology {
         pairgenerator [label="PairGenerator"]
         arvore [label="Árvore"]
         counter [label="Counter*"]
-        trainingcreator [label="TrainingCreator"]
+        trainingcreator [label="TrainingCreator*"]
     }
     //programas
     {

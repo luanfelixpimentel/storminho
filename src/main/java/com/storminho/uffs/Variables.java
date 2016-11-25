@@ -26,6 +26,10 @@ public class Variables {
     public static final String trainingOutputFile = "trainingSet.arff";
     //Sample Size
     public static final double trainingSampleSize = 0.05;
+    //Total de pares que vai ser processado
+    public static final long totalPairs = 120000;
+    //Duplicatas' total in dataset
+    public static final long duplicatesTotal = 10000;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:

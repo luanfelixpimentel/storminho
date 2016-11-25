@@ -2,15 +2,17 @@
 
 package com.storminho.uffs;
 
+import java.io.PrintStream;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
-import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.task.OutputCollector;
 
 import java.util.Map;
+import java.util.Random;
 import org.apache.storm.task.TopologyContext;
+import org.apache.storm.tuple.Fields;
 
 public class TrainingCreator extends BaseRichBolt implements IRichBolt {
     PrintStream ps;
@@ -24,37 +26,34 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         } catch (Exception e) {
             System.out.println(e);
         }
-        ss = Variables.trainingSampleSize; //selecionar 5% dos pares positivos
+        ss = Variables.trainingSampleSize;
         paresPositivos = 0;
     }
 
     @Override
     public void execute(Tuple tuple) {
         Random random = new Random();
+        int matchingInstances = (int)(ss * Variables.duplicatesTotal);
+        double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
 
-        //Como sei quantas duplicatas tenho que por aqui? Tenho que rodar uma vez pra contar?
-        int matchingInstances = (int)(SAMPLE_SIZE*duplicates.size());
-
-        //Como sei quantos pares eu uso aqui? Tenho que também rodar uma vez pra contar?
-        double nonMatchRatio = matchingInstances / (totalDePares);
-
-        //Aqui tá igual o código que você mandou. Só adaptei alguns nomes e tal.
-        if (tuple.getInt(1) == 1) {
+        if (tuple.getInteger(1).equals(1)) {
             if (random.nextDouble() < ss) { //ss = sample size
                 paresPositivos++;
             } else {
-                continue;
+                return;
             }
         } else if (nonMatchRatio <= random.nextDouble()) {
-            continue;
+            return;
         }
-
-        //Aqui eu tô salvando só os pares positivos que passaram no "ss" e os negativos que passaram no "nonMatchRatio".
-        //É isso mesmo que tem que fazer?
-        ps.println(tuple.getString(0) + "," + tuple.getInt());
+        ps.println(tuple.getString(0) + "," + tuple.getInteger(1));
         ps.flush();
     }
 
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+        declarer.declare(new Fields());
+    }
+    
     @Override
     public void cleanup() {
         ps.close();
