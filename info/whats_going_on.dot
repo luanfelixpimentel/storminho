@@ -1,12 +1,11 @@
 digraph projeto_topology {
     node [style="filled"]
+
     //files
     {
         node [shape="box" color="yellow"]
         csv [label=".csv"]
-        arff [label=".arff"]
-        out [label="out.txt"]
-        gabarito [label="gabarito.txt"]
+        impressaofinal [label="Impressao Final"]
     }
     //spouts and bolts
     {
@@ -16,14 +15,13 @@ digraph projeto_topology {
         linesave [label="LineSave"]
         indexsave [label="IndexSave"]
         pairranker [label="PairRanker"]
+        pairgenerator [label="PairGenerator"]
+        arvore [label="Árvore"]
+        counter [label="Counter"]
     }
     //programas
     {
         node [shape="trapezium" color="orange"]
-        pairgenerator [label="PairGenerator"]
-        comparator [label="Comparator"]
-        //correctnesscounter [label="CorrectnessCounter"]
-        arvore [label="Árvore"]
     }
 
     //outros
@@ -37,39 +35,24 @@ digraph projeto_topology {
         csv -> linespout [label="[:id:x:x:...]\n[:id:x:x:...]\n[.]\n[.]\n[.]"]
         linespout -> splitsentence [label="[:id:x:x:...]"]
         linespout -> linesave [label="[:id:x:x:...]"]
-        linesave -> redis [label="[id][x:x:...]"]
+        linesave -> redis [label="[id][:id:x:x:...]"]
         splitsentence -> indexsave [label="[x][id]"]
         indexsave -> redis[label="[x][id]"]
-        redis -> pairgenerator [label=""]
-        pairgenerator -> pairranker [label="[id:x:x:...][id:x:x:...]"]
-        pairranker -> gabarito [label="[1 ou 0]\n[1 ou 0]\n[.]\n[.]\n[.]"]
-        gabarito -> comparator [label=""]
-        pairranker -> arff [label="[Similaridade]"]
-        arff -> arvore [label=""]
-        arvore -> out [label="[1 ou 0]\n[1 ou 0]\n[.]\n[.]\n[.]"]
-        out -> comparator [label=""]
+        indexsave -> pairgenerator [label="[x][id que foi salvo]"]
+        pairgenerator -> redis [label="[request]"]
+        redis -> pairgenerator [label="[lista][tupla]"]
+        pairgenerator -> pairranker [label="[:id:x:x:...][:id:x:x:...]"]
+        pairranker -> arvore [label="[Similaridade][resposta_certa]"]
+        arvore -> counter [label="[resposta_arvore][resposta_certa]"]
+        counter -> impressaofinal [label="Quando a topologia acabar, imprime os resultados"]
 
-    }
-
-    //training
-    subgraph cluster_training {
-        graph [label="Vai rodar só uma vez" style=dotted]
-        node [shape="box" color=yellow]
-        trainingsource [label="TrainingSource"]
-        trainingcsv [label="training.csv"]
-        trainingset [label="trainingset.arff"]
-
-        node [shape="trapezium" color=orange]
-        trainingcreator [label="TrainingCreator"]
-        trainingranker [label="TrainingRanker\n(Um PairRanker modificado)"]
-        trainingarvore [label="Árvore"]
-        trainingsource -> trainingcreator -> trainingcsv -> trainingranker -> trainingset -> trainingarvore
     }
 
     //ranks (posições)
     {
-        {rank=same; splitsentence linesave trainingcsv}
-        {rank=same; arff gabarito trainingset}
-        {rank=same; linespout trainingcreator}
+        {rank=same; splitsentence linesave}
+        {rank=same; pairgenerator redis}
+
+
     }
 }
