@@ -1,11 +1,13 @@
 digraph projeto_topology {
     node [style="filled"]
+    comments [shape="box" fillcolor="white" label="* Terminados"]
 
     //files
     {
         node [shape="box" color="yellow"]
         csv [label=".csv"]
         impressaofinal [label="Impressao Final"]
+        trainingset [label="trainingSet.arff"]
     }
     //spouts and bolts
     {
@@ -14,10 +16,11 @@ digraph projeto_topology {
         splitsentence [label="SplitSentence*"]
         linesave [label="LineSave"]
         indexsave [label="IndexSave"]
-        pairranker [label="PairRanker"]
+        pairranker [label="PairRanker*"]
         pairgenerator [label="PairGenerator"]
         arvore [label="Árvore"]
-        counter [label="Counter"]
+        counter [label="Counter*"]
+        trainingcreator [label="TrainingCreator*"]
     }
     //programas
     {
@@ -43,6 +46,8 @@ digraph projeto_topology {
         redis -> pairgenerator [label="[lista][tupla]"]
         pairgenerator -> pairranker [label="[:id:x:x:...][:id:x:x:...]"]
         pairranker -> arvore [label="[Similaridade][resposta_certa]"]
+        pairranker -> trainingcreator [label="[Similaridade][resposta_certa]" style="dotted"]
+        trainingcreator -> trainingset [label="[Similaridade, resposta_certa]"]
         arvore -> counter [label="[resposta_arvore][resposta_certa]"]
         counter -> impressaofinal [label="Quando a topologia acabar, imprime os resultados"]
 
@@ -52,6 +57,7 @@ digraph projeto_topology {
     {
         {rank=same; splitsentence linesave}
         {rank=same; pairgenerator redis}
+        {rank=same; pairranker trainingcreator}
 
 
     }
