@@ -58,8 +58,9 @@ public class PairGenerator extends BaseRichBolt implements IRichBolt{
      @Override
     public void cleanup() {
     }
-
+    
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
+        collector = collector;
     }
 }
