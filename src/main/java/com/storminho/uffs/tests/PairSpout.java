@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.storm.topology.IRichSpout;
 import com.storminho.uffs.Variables;
 
-public class PairRankerTestSpout implements IRichSpout {
+public class PairSpout implements IRichSpout {
   private SpoutOutputCollector _collector;
   private BufferedReader reader;
 

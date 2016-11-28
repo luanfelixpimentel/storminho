@@ -49,7 +49,7 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields(""));
+        declarer.declare(new Fields("resposta_arvore", "resposta_certa"));
     }
 
     @Override

@@ -41,7 +41,7 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
 
         for (int i = Variables.fieldId + 1; i < Variables.attributesNumber; i++) {
             boolean last = i == Variables.attributesNumber - 1;
-            if ((1 & Variables.rankingMethods) != 0) store += this.cosineSim.compare(tuple1[i], tuple2[i]) + ",";
+            if ((1 & Variables.rankingMethods) != 0) store += cosineSim.compare(tuple1[i], tuple2[i]) + ",";
             if ((2 & Variables.rankingMethods) != 0) store += jaccardSim.compare(tuple1[i], tuple2[i]) + ",";
             if ((4 & Variables.rankingMethods) != 0) store += jaroWinklerSim.compare(tuple1[i], tuple2[i]) + ",";
             if ((8 & Variables.rankingMethods) != 0) store += levenshteinSim.compare(tuple1[i], tuple2[i]) + ",";
