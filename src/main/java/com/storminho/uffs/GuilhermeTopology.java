@@ -4,11 +4,6 @@ import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.tuple.Fields;
-
-import com.storminho.uffs.WordCount;
-import com.storminho.uffs.LineSpout;
-import com.storminho.uffs.WordIndexSave;
 
 public class GuilhermeTopology {
 
@@ -17,12 +12,13 @@ public class GuilhermeTopology {
     TopologyBuilder builder = new TopologyBuilder();
 
     builder.setSpout("line-spout", new LineSpout(), 5);
-    builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
+    builder.setBolt("line-save", new LineSaver(), 1).shuffleGrouping("line-spout");
     builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
-    builder.setBolt("pair-generator", new PairGenerator(), 1).shuffleGrouping("index-save");
-    builder.setBolt("pairRanker", new PairRanker(), 2).shuffleGrouping("pair-generator");
-            
+    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");            
+    builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
+    builder.setBolt("pair-ranker", new PairRanker(), 2).shuffleGrouping("pair-generator");
+    builder.setBolt("arvore", new Arvore(), 1).shuffleGrouping("pair-ranker");
+
     Config conf = new Config();
     conf.setDebug(false);
 

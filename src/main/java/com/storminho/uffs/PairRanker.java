@@ -45,11 +45,11 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
             if ((2 & Variables.rankingMethods) != 0) store += jaccardSim.compare(tuple1[i], tuple2[i]) + ",";
             if ((4 & Variables.rankingMethods) != 0) store += jaroWinklerSim.compare(tuple1[i], tuple2[i]) + ",";
             if ((8 & Variables.rankingMethods) != 0) store += levenshteinSim.compare(tuple1[i], tuple2[i]) + ",";
-            if ((16 & Variables.rankingMethods) != 0) store += qGramsDistanceSim.compare(tuple1[i], tuple2[i]) + (last ? "":",");
+            if ((16 & Variables.rankingMethods) != 0) store += qGramsDistanceSim.compare(tuple1[i], tuple2[i]) + ",";
         }
 
         // System.out.println(tuple2[1] + " # " + tuple1[1] + "\n" + store + " # " + duplicata); //just to see how things are going in terminal
-        _collector.emit(new Values(store, (duplicata ? 1:0)));
+        _collector.emit(new Values(store + (duplicata ? 1:0), (duplicata ? 1:0)));
     }
 
     //this method only checks if two tuples are duplicatas according to the number in the first column

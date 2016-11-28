@@ -6,8 +6,7 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
-import com.storminho.uffs.tests.PairRankerTestSpout;
-import com.storminho.uffs.PairRanker;
+import com.storminho.uffs.*;
 
 public class PairRankerTestTopology {
 
@@ -17,6 +16,9 @@ public class PairRankerTestTopology {
 
     builder.setSpout("test-spout", new PairRankerTestSpout(), 1);
     builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("test-spout");
+    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("arvore", new Arvore(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("arvore");
 
 
     Config conf = new Config();
@@ -27,7 +29,7 @@ public class PairRankerTestTopology {
       StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
     }
     else {
-      conf.setMaxTaskParallelism(1);
+    //   conf.setMaxTaskParallelism(1);
       LocalCluster cluster = new LocalCluster();
       cluster.submitTopology("test-topology", conf, builder.createTopology());
       System.out.println("\n\n\n=================================================");

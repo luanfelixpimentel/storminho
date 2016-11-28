@@ -7,10 +7,12 @@ public class Variables {
     public static final String projectPath = System.getenv("STORMINHO");
     //Path to arff folder
     public static final String arffPath = System.getenv("STORMINHO") + "/arff/";
-
-    /* .csv related ==========================================================*/
+    //Path to out folder
+    public static final String outPath = System.getenv("STORMINHO") + "/out/";
     //Path to csv folder
     public static final String csvPath = System.getenv("STORMINHO") + "/csv/";
+
+    /* .csv related ==========================================================*/
     //Where the tuple is gonna be split
     public static final String splitChars = ":+\\s*";
     //Which tuple's column holds the id field
@@ -20,12 +22,14 @@ public class Variables {
 
 
     /* TrainingCreator =======================================================*/
-    //How many lines the training set will have
-    public static final int trainingLinesNumber = 10;
-    //The csv file that will be used
-    public static final String trainingCsvFile = "cd-100.csv";
     //Name of the output's file
-    public static final String trainingOutputFile = "training.csv";
+    public static final String trainingOutputFile = "trainingSet.arff";
+    //Sample Size
+    public static final double trainingSampleSize = 1;
+    //Total de pares que vai ser processado
+    public static final long totalPairs = 50;
+    //Duplicatas' total in dataset
+    public static final long duplicatesTotal = 3;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:
@@ -37,4 +41,7 @@ public class Variables {
     public final static int rankingMethods = 1 + 8;
     //Where Id field will be split
     public static final String indexSplitToken = "-";
+
+    /* Counter ===============================================================*/
+    public static final String counterOutputFile = "CONTAGEM";
 }
