@@ -1,20 +1,23 @@
 package com.storminho.uffs;
 
+import java.util.concurrent.TimeUnit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCommands;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.concurrent.TimeUnit;
-
-import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
+import org.apache.storm.task.OutputCollector;
+import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
+import org.apache.storm.task.TopologyContext;
 
-
-public class LineSaver extends BaseBasicBolt{
-
+public class PairGenerator extends BaseBasicBolt{
+    
     private JedisPool pool;
     
     private void setupJedisPool() {
@@ -27,16 +30,18 @@ public class LineSaver extends BaseBasicBolt{
     pool = new JedisPool(poolConfig,"localhost", 6379);
     }
     
-    @Override
-    public void execute(Tuple tuple, BasicOutputCollector collector) {
+    public void execute(String word, String lineId) {
     Jedis jedis = pool.getResource();
     JedisCommands jedisCommands = null;
-    //Jedis will store on database the Key (ex: rec-01234, and the rest of the string attached as list
-    jedis.set(tuple.getString(0).split(Variables.splitChars)[Variables.fieldId], tuple.getString(0));
+    
+    jedis.;
+    if("");
+    }
    }
 
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        throw new UnsupportedOperationException("Line-saver não possui output fields"); //To change body of generated methods, choose Tools | Templates.
-    }
+
+ @Override
+  public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    declarer.declare(new Fields("word", "id"));
+  }
 }
