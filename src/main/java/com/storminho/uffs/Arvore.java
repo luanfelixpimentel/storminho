@@ -3,6 +3,7 @@ package com.storminho.uffs;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.List;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
@@ -12,7 +13,10 @@ import org.apache.storm.task.OutputCollector;
  import weka.classifiers.trees.J48;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.storm.task.TopologyContext;
+import weka.core.DenseInstance;
 import weka.core.Instances;
 
 public class Arvore extends BaseRichBolt implements IRichBolt {
@@ -44,12 +48,18 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-
+        Instances ins = (Instances)tuple.getValues().get(0);
+        try {
+            System.out.println("###" + ins + "###" + tuple.getInteger(1));
+            // System.out.println(arv.classifyInstance(ins.instance(0)) + "#####");
+        } catch (Exception ex) {
+            Logger.getLogger(Arvore.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields(""));
+        declarer.declare(new Fields("resposta_arvore", "resposta_certa"));
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.tuple.Fields;
+import weka.core.Instances;
 
 public class TrainingCreator extends BaseRichBolt implements IRichBolt {
     PrintStream ps;
@@ -33,23 +34,25 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-        Random random = new Random();
-        int matchingInstances = (int)(ss * Variables.duplicatesTotal);
-        double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
-
-        System.out.println(tuple.getString(0));
-        paresTotais++;
-        if (tuple.getInteger(1).equals(1)) {
-            if (random.nextDouble() < ss) { //ss = sample size
-                paresPositivos++;
-            } else {
-                return;
-            }
-        } else if (nonMatchRatio <= random.nextDouble()) {
-            return;
-        }
-        ps.println(tuple.getString(0) + "," + tuple.getInteger(1));
-        ps.flush();
+        Instances ins = (Instances)tuple.getValues().get(0);
+        System.out.println(ins.instance(0) + "\n\n");
+        // Random random = new Random();
+        // int matchingInstances = (int)(ss * Variables.duplicatesTotal);
+        // double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
+        //
+        // System.out.println(tuple.getString(0));
+        // paresTotais++;
+        // if (tuple.getInteger(1).equals(1)) {
+        //     if (random.nextDouble() < ss) { //ss = sample size
+        //         paresPositivos++;
+        //     } else {
+        //         return;
+        //     }
+        // } else if (nonMatchRatio <= random.nextDouble()) {
+        //     return;
+        // }
+        // ps.println(tuple.getString(0) + "," + tuple.getInteger(1));
+        // ps.flush();
     }
 
     //Write "frame" for the .arff file

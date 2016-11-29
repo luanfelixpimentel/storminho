@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.storm.topology.IRichSpout;
 import com.storminho.uffs.Variables;
 
-public class PairRankerTestSpout implements IRichSpout {
+public class PairSpout implements IRichSpout {
   private SpoutOutputCollector _collector;
   private BufferedReader reader;
 
@@ -22,7 +22,7 @@ public class PairRankerTestSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-100.csv"));
+      reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-10-pairs.csv"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
