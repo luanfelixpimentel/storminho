@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.tuple.Fields;
+import weka.core.DenseInstance;
 import weka.core.Instances;
 
 public class TrainingCreator extends BaseRichBolt implements IRichBolt {
@@ -36,11 +37,12 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         //weka
         WekaStorminho ws = new WekaStorminho();
         dataRaw = ws.newInstances("TrainingInstances");
+
     }
 
     @Override
     public void execute(Tuple tuple) {
-        Instances ins = (Instances)tuple.getValues().get(0);
+        DenseInstance ins = (DenseInstance)tuple.getValues().get(0);
         Random random = new Random();
         int matchingInstances = (int)(ss * Variables.duplicatesTotal);
         double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
@@ -55,8 +57,9 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         } else if (nonMatchRatio <= random.nextDouble()) {
             return;
         }
-        ins.instance(0).setDataset(dataRaw);
-        dataRaw.add(0, ins.instance(0));
+        ins.setDataset(dataRaw);
+        ins.setClassValue((tuple.getInteger(1) == 1 ? "duplicata":"não-duplicata"));
+        dataRaw.add(ins);
     }
 
     //Write "frame" for the .arff file

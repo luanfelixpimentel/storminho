@@ -2,7 +2,9 @@ package com.storminho.uffs;
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
@@ -23,41 +25,48 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
     OutputCollector _collector;
     J48 arv;
     Instances data;
+    BufferedReader reader;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         _collector = collector;
 
+        //weka
         data = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(Variables.arffPath + Variables.trainingOutputFile));
+            reader = new BufferedReader(new FileReader(Variables.arffPath + Variables.trainingOutputFile));
+            System.out.println("checkcheckpizza1" + reader);
             data = new Instances(reader);
-            reader.close();
+            System.out.println("checkcheckpizza2" + data);
             data.setClassIndex(data.numAttributes() - 1);
-        } catch (Exception e) {
-            System.out.println("\n\n" + e + "\n\n");
+            System.out.println("checkcheckpizza3");
+            arv = new J48();
+            System.out.println("checkcheckpizza4");
+            arv.setUnpruned(true);
+            System.out.println("checkcheckpizza5");
+            arv.buildClassifier(data);
+            System.out.println("checkcheckpizza6");
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
 
-        String[] opt = new String[1];
-        // opt[0] = "-U";
-        arv = new J48();
-        try {
-            // arv.setOptions(opt);
-            arv.buildClassifier(data);
-        } catch (Exception e) { System.out.println("\n\n" + e + "\n\n"); }
     }
 
     @Override
     public void execute(Tuple tuple) {
-        Instances ins = (Instances)tuple.getValues().get(0);
+        DenseInstance ins = (DenseInstance)tuple.getValues().get(0);
         double result;
+        ins.setDataset(data);
+        ins.setClassMissing();
+        System.out.println(data.checkInstance(ins));
         try {
-            result = arv.classifyInstance(ins.instance(0));
-            System.out.println("O que deu : " + result);
+            result = arv.classifyInstance(ins);
+            System.out.println("O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
+            System.out.println();
         } catch (Exception ex) {
+            System.out.println(ex);
             Logger.getLogger(Arvore.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("O que veio: " + (double)tuple.getInteger(1) + "\n");
 
     }
 
@@ -68,6 +77,10 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void cleanup() {
-
+        try {
+            reader.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Arvore.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.storm.topology.IRichSpout;
-import com.storminho.uffs.Variables;
 
 public class LineSpout implements IRichSpout {
   private SpoutOutputCollector _collector;

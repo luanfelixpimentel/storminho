@@ -24,8 +24,6 @@ import weka.core.Instances;
 public class PairRanker extends BaseRichBolt implements IRichBolt {
     private StringMetric cosineSim, jaccardSim, jaroWinklerSim, levenshteinSim, qGramsDistanceSim;
     private OutputCollector _collector;
-    private Instances dataRaw;
-    private WekaStorminho ws;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector c) {
@@ -35,10 +33,6 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         levenshteinSim = StringMetrics.levenshtein();
         qGramsDistanceSim = StringMetrics.qGramsDistance();
         _collector = c;
-
-        //weka
-        WekaStorminho ws = new WekaStorminho();
-        dataRaw = ws.newInstances("TestInstances");
     }
 
     @Override
@@ -47,30 +41,28 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         String tuple1[] = tuple.getString(0).split(Variables.splitChars);
         String tuple2[] = tuple.getString(1).split(Variables.splitChars);
         String store = "";
-        double[] instanceValues = new double[Variables.getFieldsNumber()];
+        double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
 
         //for for instance
-        for (int i = 0, j = Variables.fieldId + 1; i < Variables.getFieldsNumber(); j++) {
+        for (int i = 0, j = Variables.fieldId + 1; i < instanceValues.length - 1; j++) {
             if ((1 & Variables.rankingMethods) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
             if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
             if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
             if ((8 & Variables.rankingMethods) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
             if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
         }
+        instanceValues[Variables.getFieldsNumber()] = (duplicata ? 1:0);
 
-        Instance inst = new DenseInstance(1.0, instanceValues);
-        inst.setDataset(dataRaw);
-        dataRaw.add(0, inst);
+        DenseInstance inst = new DenseInstance(1.0, instanceValues);
         // System.out.println("First: " + dataRaw.firstInstance());
         // System.out.println("Last:  " + dataRaw.lastInstance());
         // System.out.println("Number of Instances: " + dataRaw.numInstances());
         // System.out.println();
-        _collector.emit(new Values(new Instances(dataRaw), (duplicata ? 1:0)));
-        dataRaw.remove(0);
+        _collector.emit(new Values(inst, (duplicata ? 1:0)));
     }
 
     //this method only checks if two tuples are duplicatas according to the number in the first column
-    private static boolean isDuplicata(String tupleA, String tupleB) {
+    private boolean isDuplicata(String tupleA, String tupleB) {
         //split the tuples' indexes to separe the identifier
         String[] aSplit = tupleA.split(Variables.indexSplitToken);
         String[] bSplit = tupleB.split(Variables.indexSplitToken);
