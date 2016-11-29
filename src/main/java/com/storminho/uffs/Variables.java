@@ -38,9 +38,11 @@ public class Variables {
     * 4 - Jaro Winkler Similarity
     * 8 - Levenshtein Similarity
     * Ex: public final static int rankingMethods = 2 + 8; means that Jaccard and Levenshtein gonna be used */
-    public final static int rankingMethods = 1 + 8;
+    public final static int rankingMethods = 1 + 2 + 4 + 8;
     //Where Id field will be split
     public static final String indexSplitToken = "-";
+    //names used in attributes in arff files
+    public static final String arffAttributesPrefix = "att";
 
     /* Counter ===============================================================*/
     public static final String counterOutputFile = "CONTAGEM";
