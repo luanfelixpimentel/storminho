@@ -1,11 +1,14 @@
 package com.storminho.uffs;
 
+import java.util.Map;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCommands;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.TimeUnit;
+import org.apache.storm.task.OutputCollector;
+import org.apache.storm.task.TopologyContext;
 
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.base.BaseBasicBolt;
@@ -38,5 +41,14 @@ public class LineSaver extends BaseBasicBolt{
     @Override
     public void declareOutputFields(OutputFieldsDeclarer ofd) {
         throw new UnsupportedOperationException("Line-saver não possui output fields"); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void prepare(Map map, TopologyContext context, OutputCollector collector) {
+        collector = collector;
+    }
+    
+     @Override
+    public void cleanup() {
+
     }
 }
