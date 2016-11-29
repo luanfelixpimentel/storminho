@@ -14,12 +14,13 @@ import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.tuple.Fields;
 
 
 public class LineSaver extends BaseBasicBolt{
 
     private JedisPool pool;
-    
+
     private void setupJedisPool() {
     JedisPoolConfig poolConfig = new JedisPoolConfig();
     poolConfig.setTestOnBorrow(true);
@@ -29,7 +30,7 @@ public class LineSaver extends BaseBasicBolt{
 
     pool = new JedisPool(poolConfig,"localhost", 6379);
     }
-    
+
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
     Jedis jedis = pool.getResource();
@@ -40,13 +41,14 @@ public class LineSaver extends BaseBasicBolt{
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        throw new UnsupportedOperationException("Line-saver não possui output fields"); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Line-saver não possui output fields"); //To change body of generated methods, choose Tools | Templates.
+        ofd.declare(new Fields("oi"));
     }
-    
+
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         collector = collector;
     }
-    
+
      @Override
     public void cleanup() {
 

@@ -18,9 +18,9 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisLookupBolt extends BaseRichBolt implements IRichBolt{
-    
+
       private JedisPool pool;
-    
+
     private void setupJedisPool() {
     JedisPoolConfig poolConfig = new JedisPoolConfig();
     poolConfig.setTestOnBorrow(true);
@@ -30,7 +30,7 @@ public class RedisLookupBolt extends BaseRichBolt implements IRichBolt{
 
     pool = new JedisPool(poolConfig,"localhost", 6379);
     }
-    
+
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         collector = collector;
     }
@@ -48,7 +48,7 @@ public class RedisLookupBolt extends BaseRichBolt implements IRichBolt{
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("", ""));
+        // declarer.declare(new Fields(""));
     }
 
     public void cleanup() {
