@@ -25,11 +25,11 @@ public class Variables {
     //Name of the output's file
     public static final String trainingOutputFile = "trainingSet.arff";
     //Sample Size
-    public static final double trainingSampleSize = 1;
+    public static final double trainingSampleSize = 0.1;
     //Total de pares que vai ser processado
-    public static final long totalPairs = 50;
+    public static final long totalPairs = 5050;
     //Duplicatas' total in dataset
-    public static final long duplicatesTotal = 3;
+    public static final long duplicatesTotal = 100;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:
@@ -46,4 +46,18 @@ public class Variables {
 
     /* Counter ===============================================================*/
     public static final String counterOutputFile = "CONTAGEM";
+
+    //how many fields the weka instances will have
+    public static int getFieldsNumber() {
+        return (attributesNumber - (fieldId + 1)) * countSim();
+    }
+
+    //count the true bits to count how many methods will be used
+    static private int countSim() {
+        int rm = Variables.rankingMethods, count = 0;
+        for (; rm != 0; rm /= 2) {
+            if ((1 & rm) != 0) count++;
+        }
+        return count;
+    }
 }

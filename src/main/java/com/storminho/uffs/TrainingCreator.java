@@ -19,6 +19,9 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
     PrintStream ps;
     double ss;
     int paresPositivos, paresTotais;
+    Instances dataRaw;
+    private WekaStorminho ws;
+
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
@@ -29,30 +32,31 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         }
         ss = Variables.trainingSampleSize;
         paresPositivos = paresTotais = 0;
-        initializeArrfFile();
+
+        //weka
+        WekaStorminho ws = new WekaStorminho();
+        dataRaw = ws.newInstances("TrainingInstances");
     }
 
     @Override
     public void execute(Tuple tuple) {
         Instances ins = (Instances)tuple.getValues().get(0);
-        System.out.println(ins.instance(0) + "\n\n");
-        // Random random = new Random();
-        // int matchingInstances = (int)(ss * Variables.duplicatesTotal);
-        // double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
-        //
-        // System.out.println(tuple.getString(0));
-        // paresTotais++;
-        // if (tuple.getInteger(1).equals(1)) {
-        //     if (random.nextDouble() < ss) { //ss = sample size
-        //         paresPositivos++;
-        //     } else {
-        //         return;
-        //     }
-        // } else if (nonMatchRatio <= random.nextDouble()) {
-        //     return;
-        // }
-        // ps.println(tuple.getString(0) + "," + tuple.getInteger(1));
-        // ps.flush();
+        Random random = new Random();
+        int matchingInstances = (int)(ss * Variables.duplicatesTotal);
+        double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
+
+        paresTotais++;
+        if (tuple.getInteger(1).equals(1)) {
+            if (random.nextDouble() < ss) { //ss = sample size
+                paresPositivos++;
+            } else {
+                return;
+            }
+        } else if (nonMatchRatio <= random.nextDouble()) {
+            return;
+        }
+        ins.instance(0).setDataset(dataRaw);
+        dataRaw.add(0, ins.instance(0));
     }
 
     //Write "frame" for the .arff file
@@ -80,6 +84,8 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void cleanup() {
+        ps.print(dataRaw);
+        ps.flush();
         ps.close();
         System.out.println("\n\n\nPARES DUPLICADOS: " + paresPositivos + " PARES TOTAIS: " + paresTotais + "\n\n\n");
     }

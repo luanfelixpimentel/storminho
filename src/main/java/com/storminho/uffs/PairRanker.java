@@ -14,7 +14,6 @@ import org.apache.storm.task.TopologyContext;
 import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.StringMetrics;
 import org.apache.storm.tuple.Values;
-import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -26,7 +25,7 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
     private StringMetric cosineSim, jaccardSim, jaroWinklerSim, levenshteinSim, qGramsDistanceSim;
     private OutputCollector _collector;
     private Instances dataRaw;
-    private int instancesFieldsNumber;
+    private WekaStorminho ws;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector c) {
@@ -38,28 +37,8 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         _collector = c;
 
         //weka
-        instancesFieldsNumber = (Variables.attributesNumber - (Variables.fieldId + 1)) * countSim();
-        ArrayList<Attribute> atts = new ArrayList<Attribute>(instancesFieldsNumber + 1);
-
-        ArrayList<String> classVal = new ArrayList<String>(2);
-        classVal.add("1");
-        classVal.add("0");
-        for (int i = 0; i < instancesFieldsNumber; i++) {
-            atts.add(new Attribute("att" + i));
-        }
-        atts.add(new Attribute("resultado", classVal));
-        dataRaw = new Instances("TestInstances",atts,0);
-        dataRaw.setClassIndex(dataRaw.numAttributes() - 1);
-        // dataRaw.setClass(new Attribute("resultado", classVal));
-    }
-
-    //count the true bits to count how many methods will be used
-    static private int countSim() {
-        int rm = Variables.rankingMethods, count = 0;
-        for (; rm != 0; rm /= 2) {
-            if ((1 & rm) != 0) count++;
-        }
-        return count;
+        WekaStorminho ws = new WekaStorminho();
+        dataRaw = ws.newInstances("TestInstances");
     }
 
     @Override
@@ -68,10 +47,10 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         String tuple1[] = tuple.getString(0).split(Variables.splitChars);
         String tuple2[] = tuple.getString(1).split(Variables.splitChars);
         String store = "";
-        double[] instanceValues = new double[instancesFieldsNumber];
+        double[] instanceValues = new double[Variables.getFieldsNumber()];
 
         //for for instance
-        for (int i = 0, j = Variables.fieldId + 1; i < instancesFieldsNumber; j++) {
+        for (int i = 0, j = Variables.fieldId + 1; i < Variables.getFieldsNumber(); j++) {
             if ((1 & Variables.rankingMethods) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
             if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
             if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
@@ -82,10 +61,10 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         Instance inst = new DenseInstance(1.0, instanceValues);
         inst.setDataset(dataRaw);
         dataRaw.add(0, inst);
-        System.out.println("First: " + dataRaw.firstInstance());
-        System.out.println("Last: " + dataRaw.lastInstance());
-        System.out.println("Number of Instances: " + dataRaw.numInstances());
-        System.out.println();
+        // System.out.println("First: " + dataRaw.firstInstance());
+        // System.out.println("Last:  " + dataRaw.lastInstance());
+        // System.out.println("Number of Instances: " + dataRaw.numInstances());
+        // System.out.println();
         _collector.emit(new Values(new Instances(dataRaw), (duplicata ? 1:0)));
         dataRaw.remove(0);
     }

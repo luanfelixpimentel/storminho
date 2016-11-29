@@ -22,12 +22,13 @@ import weka.core.Instances;
 public class Arvore extends BaseRichBolt implements IRichBolt {
     OutputCollector _collector;
     J48 arv;
+    Instances data;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         _collector = collector;
 
-        Instances data = null;
+        data = null;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(Variables.arffPath + Variables.trainingOutputFile));
             data = new Instances(reader);
@@ -38,10 +39,10 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
         }
 
         String[] opt = new String[1];
-        opt[0] = "-U";
+        // opt[0] = "-U";
         arv = new J48();
         try {
-            arv.setOptions(opt);
+            // arv.setOptions(opt);
             arv.buildClassifier(data);
         } catch (Exception e) { System.out.println("\n\n" + e + "\n\n"); }
     }
@@ -49,12 +50,15 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
     @Override
     public void execute(Tuple tuple) {
         Instances ins = (Instances)tuple.getValues().get(0);
+        double result;
         try {
-            System.out.println("###" + ins + "###" + tuple.getInteger(1));
-            // System.out.println(arv.classifyInstance(ins.instance(0)) + "#####");
+            result = arv.classifyInstance(ins.instance(0));
+            System.out.println("O que deu : " + result);
         } catch (Exception ex) {
             Logger.getLogger(Arvore.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("O que veio: " + (double)tuple.getInteger(1) + "\n");
+
     }
 
     @Override

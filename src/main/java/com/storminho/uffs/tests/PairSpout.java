@@ -22,7 +22,7 @@ public class PairSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-10-pairs.csv"));
+      reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-100-pairs.csv"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
