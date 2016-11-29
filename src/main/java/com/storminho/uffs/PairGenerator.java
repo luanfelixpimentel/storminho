@@ -33,6 +33,7 @@ public class PairGenerator extends BaseRichBolt implements IRichBolt{
     pool = new JedisPool(poolConfig,"localhost", 6379);
     }
     
+    @Override
     public void execute(Tuple tuple) {
      String word = tuple.getString(0);
      String lineId = tuple.getString(1);
