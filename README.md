@@ -11,4 +11,4 @@ Para mais informações a respeito da utilização e funcionamento do Storm, cli
 
 Abaixo, disponibilizamos o fluxograma inicial da topologia atual utilizada no projeto. Por estar em desenvolvimento, alterações podem ser feitas na imagem até a conclusão da pesquisa.
 
-Para visualizar o fluxograma, clique ![aqui]({{site.baseurl}}/http://i67.tinypic.com/b4w4sh.jpg)
+Para visualizar o fluxograma, clique [aqui](http://oi67.tinypic.com/b4w4sh.jpg).
