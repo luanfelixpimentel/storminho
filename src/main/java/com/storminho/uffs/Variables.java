@@ -14,7 +14,7 @@ public class Variables {
 
     /* .csv related ==========================================================*/
     //Where the tuple is gonna be split
-    public static final String splitChars = ":+\\s*";
+    public static final String splitChars = ":*,*\\s*";
     //Which tuple's column holds the id field
     public static final int fieldId = 1;
     //how many columns does the csv have in total

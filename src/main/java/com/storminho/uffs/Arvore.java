@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.storm.task.TopologyContext;
+import org.apache.storm.tuple.Values;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 
@@ -33,38 +34,39 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
         data = null;
         try {
             reader = new BufferedReader(new FileReader(Variables.arffPath + Variables.trainingOutputFile));
-            System.out.println("checkcheckpizza1" + reader);
             data = new Instances(reader);
-            System.out.println("checkcheckpizza2" + data);
             data.setClassIndex(data.numAttributes() - 1);
-            System.out.println("checkcheckpizza3");
             arv = new J48();
-            System.out.println("checkcheckpizza4");
             arv.setUnpruned(true);
-            System.out.println("checkcheckpizza5");
             arv.buildClassifier(data);
-            System.out.println("checkcheckpizza6");
         } catch (Exception ex) {
             System.out.println(ex);
         }
-
     }
 
     @Override
     public void execute(Tuple tuple) {
         DenseInstance ins = (DenseInstance)tuple.getValues().get(0);
-        double result;
+        double result = -1;
         ins.setDataset(data);
         ins.setClassMissing();
         try {
             result = arv.classifyInstance(ins);
-            System.out.println(ins + "\n" + "O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
-            System.out.println();
+            //System.out.println(ins + "\n" + "O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
+            //System.out.println();
         } catch (Exception ex) {
             System.out.println(ex);
             Logger.getLogger(Arvore.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if ((int)(result + 0.5) != (int)result) {
+            System.out.print("//////////////////////////////////\n\n");
+            System.out.print("/Resposta    : " + result);
+            System.out.print("/Cast com 0.5: " + (int)(result + 0.5));
+            System.out.print("/Cast normal : " + (int)result);
+            System.out.print("//////////////////////////////////\n\n");
 
+        }
+        _collector.emit(new Values((int)(result + 0.5), tuple.getInteger(1)));
     }
 
     @Override
