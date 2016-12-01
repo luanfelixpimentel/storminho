@@ -22,7 +22,7 @@ public class LineSaver extends BaseBasicBolt implements Serializable{
     
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
         _collector = collector;
-        Jedis jedis = null;   
+        Jedis jedis = null;
     }    
     
     @Override
@@ -37,7 +37,6 @@ public class LineSaver extends BaseBasicBolt implements Serializable{
         //  System.out.println("JEDIS"+linha);
         //pool.destroy();
     }
-
      @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields("lineId"));

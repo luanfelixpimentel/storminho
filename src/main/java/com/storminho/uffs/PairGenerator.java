@@ -1,11 +1,17 @@
 package com.storminho.uffs;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4efcee6ffd6085bdb4975175ee746df52c7bf93
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import redis.clients.jedis.Jedis;
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4efcee6ffd6085bdb4975175ee746df52c7bf93
 
 import org.apache.storm.tuple.Values;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -13,10 +19,15 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
+<<<<<<< HEAD
 
 import org.apache.storm.topology.base.BaseRichBolt;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+=======
+import org.apache.storm.topology.base.BaseRichBolt;
+import redis.clients.jedis.JedisPool;
+>>>>>>> d4efcee6ffd6085bdb4975175ee746df52c7bf93
 
 public class PairGenerator extends BaseRichBolt implements Serializable{
     
@@ -31,6 +42,7 @@ public class PairGenerator extends BaseRichBolt implements Serializable{
 
     @Override
     public void execute(Tuple tuple) {
+        
      String word = tuple.getString(0);
      String lineId = tuple.getString(1);
      String aux;

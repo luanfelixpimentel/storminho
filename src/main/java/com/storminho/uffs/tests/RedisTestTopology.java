@@ -27,6 +27,7 @@ public class RedisTestTopology {
     poolConfig.setMaxWaitMillis(120000);
     JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
 
+
     
     builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");

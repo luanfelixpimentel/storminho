@@ -13,6 +13,8 @@ public class GuilhermeTopology {
   public static void main(String[] args) throws Exception {
 
     TopologyBuilder builder = new TopologyBuilder();
+    JedisPoolConfig poolConfig = new JedisPoolConfig.Builder().setHost("127.0.0.1").setPort(6379).build();
+
 
     
      

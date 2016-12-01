@@ -2,10 +2,8 @@ package com.storminho.uffs;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
