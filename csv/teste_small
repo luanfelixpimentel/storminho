@@ -1,4 +1,3 @@
-rec_id, culture, sex, age, date_of_birth, title, given_name, surname, state, suburb, postcode, street_number, address_1, address_2, phone_number, soc_sec_id, blocking_number, family_role
 rec-640-org,   usa, f, 19, 19970322, , marlee, hines, sa, warrachie, 3187, 53, wanganeen avenue, wollartukkee, 07 78445416, 8499200, 6, NoRole
 rec-175-org,   ser, f, 21, 19950704, , emmet, selimovic, vic, powelltown, 2137, 1422, hattersley court, , 08 10662181, 7883398, 9, NoRole
 rec-467-org,   vie, f, 29, 19870624, dr, danielle, cahn, sa, warilla, 2481, 1288, rudder place, , 7 61095240, 1216722, 4, NoRole

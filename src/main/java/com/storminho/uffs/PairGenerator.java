@@ -33,12 +33,15 @@ public class PairGenerator extends BaseRichBolt implements Serializable{
     @Override
     public void execute(Tuple tuple) {
      Jedis jedis = pool.getResource();  
+     String chega = tuple.getString(1);
+     if(!tuple.getString(0).isEmpty()){
      List<String> list = jedis.lrange(tuple.getString(0), 0 ,jedis.llen(tuple.getString(0)));
-     for (String aux : list) { 
-         _collector.emit(new Values(aux, tuple.getString(1)));
-         System.out.println(tuple.getString(1)+ " # " +aux);
+     for (String aux : list) {
+//         System.out.println(jedis.get(aux) + " \n" + jedis.get(chega) + "\n");
+         _collector.emit(new Values(jedis.get(aux), jedis.get(chega)));
      }
-     
+     }
+     //jedis.shutdown();
     }
     
     @Override

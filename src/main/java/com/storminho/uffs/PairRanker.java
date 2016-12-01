@@ -37,19 +37,28 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
+//        System.out.println("[" + tuple.getString(0)+ " " +tuple.getString(1) + "]");
         boolean duplicata = isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
         String tuple1[] = tuple.getString(0).split(Variables.splitChars);
         String tuple2[] = tuple.getString(1).split(Variables.splitChars);
         String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
-
         //for for instance
-        for (int i = 0, j = Variables.fieldId + 1; i < instanceValues.length - 1; j++) {
-            if ((1 & Variables.rankingMethods) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
-            if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
-            if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
-            if ((8 & Variables.rankingMethods) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
-            if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
+        for (int i = 0, j = Variables.fieldId + 1; j < tuple1.length; j++) {
+            try {
+                if ((1 & Variables.rankingMethods) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
+                if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
+                if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
+                if ((8 & Variables.rankingMethods) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
+                if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]); 
+            } catch (Exception e) {
+                e.printStackTrace();
+                for (int x = 0; x < tuple1.length; x++) {
+                    System.out.println("[" + tuple1[x] + "]");   
+                    System.out.println("[" + tuple2[x] + "]");
+                }
+                System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
+            }
         }
         instanceValues[Variables.getFieldsNumber()] = (duplicata ? 1:0);
 
@@ -57,7 +66,8 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         // System.out.println("First: " + dataRaw.firstInstance());
         // System.out.println("Last:  " + dataRaw.lastInstance());
         // System.out.println("Number of Instances: " + dataRaw.numInstances());
-        // System.out.println();
+//         System.out.println("@" + inst);
+        
         _collector.emit(new Values(inst, (duplicata ? 1:0)));
     }
 
@@ -68,7 +78,13 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         String[] bSplit = tupleB.split(Variables.indexSplitToken);
 
         //check if the identifier of both are equal
-        return (Integer.parseInt(aSplit[1]) == Integer.parseInt(bSplit[1]));
+        boolean flag = false;
+        try {
+            flag = (Integer.parseInt(aSplit[1]) == Integer.parseInt(bSplit[1]));
+        } catch (Exception e) {
+            System.out.println("com.storminho.uffs.PairRanker.isDuplicata()");
+        }
+            return flag;
     }
 
     @Override

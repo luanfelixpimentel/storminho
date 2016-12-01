@@ -1,6 +1,6 @@
-Falsos Positivos: 0
+Falsos Positivos: 331
 Falsos Negativos: 0
-Verdadeiros Positivos: 0
-Verdadeiros Negativos: 0
-Precisão: NaN
-Revocação: NaN
+Verdadeiros Positivos: 131
+Verdadeiros Negativos: 12464
+Precisão: 0.28354978354978355
+Revocação: 1.0

@@ -23,15 +23,17 @@ public class GuilhermeTopology {
     //configuring it for some good max value so that timeout don't occur
     poolConfig.setMaxWaitMillis(120000);
     JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-    
 
-    builder.setSpout("line-spout", new LineSpout(), 5);
+
+    builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
     builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");            
+    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
     builder.setBolt("pair-ranker", new PairRanker(), 2).shuffleGrouping("pair-generator");
-    builder.setBolt("arvore", new Arvore(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("decisiontree", new DecisionTree(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("decisiontree");
 
     Config conf = new Config();
     conf.setDebug(false);

@@ -10,8 +10,8 @@ public class WekaStorminho {
         ArrayList<Attribute> atts = new ArrayList<Attribute>(Variables.getFieldsNumber() + 1);
         ArrayList<String> classVal = new ArrayList<String>(2);
 
-        classVal.add("duplicata");
         classVal.add("não-duplicata");
+        classVal.add("duplicata");
         for (int i = 0; i < Variables.getFieldsNumber(); i++) {
             atts.add(new Attribute("att" + i));
         }

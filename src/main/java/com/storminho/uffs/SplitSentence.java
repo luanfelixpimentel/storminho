@@ -19,7 +19,11 @@ public class SplitSentence extends BaseBasicBolt {
     int idField = Variables.fieldId;
     //Send every word from the tuple to collector, except the id
     for (int i = idField + 1; i < allWords.length; i++) { //print all to test
-        collector.emit(new Values(allWords[i], allWords[idField]));
+        if (!allWords[i].equals("")) {
+            collector.emit(new Values(allWords[i], allWords[idField]));
+//            System.out.println(allWords[i]+ " # " +allWords[idField]);
+        }
+        
     }
   }
 

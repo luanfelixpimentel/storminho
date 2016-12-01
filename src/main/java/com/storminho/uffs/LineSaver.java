@@ -32,10 +32,12 @@ public class LineSaver extends BaseBasicBolt implements Serializable{
         String line = tuple.getString(0);
         Jedis jedis = pool.getResource(); 
         //Salva no formato [chave = rec0102][toda a linha incluindo o rec]
-        jedis.set(key, line);
-        String linha = jedis.get(key);
+        if(!key.equals("")) {
+            jedis.set(key, line);
+            String linha = jedis.get(key);
+        }
         //  System.out.println("JEDIS"+linha);
-        //pool.destroy();
+       // jedis.shutdown();
     }
      @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {

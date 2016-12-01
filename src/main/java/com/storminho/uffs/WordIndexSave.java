@@ -64,16 +64,16 @@ public class WordIndexSave extends BaseBasicBolt implements Serializable {
     @Override
     public void cleanup() {
         //print all the set before leave topology
-        Iterator<Set> lt = this.indexes.values().iterator();
-        Iterator<String> st = this.indexes.keySet().iterator();
-        while (lt.hasNext()) {
-            Iterator<String> it = lt.next().iterator();
-            System.out.print("Palavra [" + st.next() + "]");
-            while (it.hasNext()) {
-                System.out.print(" " + it.next() +" ");
-            }
-            System.out.println();
-        }
+//        Iterator<Set> lt = this.indexes.values().iterator();
+//        Iterator<String> st = this.indexes.keySet().iterator();
+//        while (lt.hasNext()) {
+//            Iterator<String> it = lt.next().iterator();
+//            System.out.print("Palavra [" + st.next() + "]");
+//            while (it.hasNext()) {
+//                System.out.print(" " + it.next() +" ");
+//            }
+//            System.out.println();
+//        }
     }
 }
 

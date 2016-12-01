@@ -14,22 +14,22 @@ public class Variables {
 
     /* .csv related ==========================================================*/
     //Where the tuple is gonna be split
-    public static final String splitChars = ":+\\s*";
+    public static final String splitChars = ",";
     //Which tuple's column holds the id field
-    public static final int fieldId = 1;
+    public static final int fieldId = 0;
     //how many columns does the csv have in total
-    public final static int attributesNumber = 12;
+    public final static int attributesNumber = 18;
 
 
     /* TrainingCreator =======================================================*/
     //Name of the output's file
     public static final String trainingOutputFile = "trainingSet.arff";
     //Sample Size
-    public static final double trainingSampleSize = 0.1;
+    public static final double trainingSampleSize = 0.3;
     //Total de pares que vai ser processado
-    public static final long totalPairs = 5050;
+    public static final long totalPairs = 2073;
     //Duplicatas' total in dataset
-    public static final long duplicatesTotal = 100;
+    public static final long duplicatesTotal = 22;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:
@@ -37,8 +37,9 @@ public class Variables {
     * 2 - Jaccard  Similarity
     * 4 - Jaro Winkler Similarity
     * 8 - Levenshtein Similarity
+    * 16 - Grams
     * Ex: public final static int rankingMethods = 2 + 8; means that Jaccard and Levenshtein gonna be used */
-    public final static int rankingMethods = 1 + 2 + 4 + 8;
+    public final static int rankingMethods = 1 + 2 + 4 + 8 + 16;
     //Where Id field will be split
     public static final String indexSplitToken = "-";
     //names used in attributes in arff files

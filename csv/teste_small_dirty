@@ -1,4 +1,3 @@
-rec_id, culture, sex, age, date_of_birth, title, given_name, surname, state, suburb, postcode, street_number, address_1, address_2, phone_number, soc_sec_id, blocking_number, family_role
 rec-806-org,   rom, f, 33, 19830615, , thomas, istok, sa, boggabri, 3631, 65, nungara street, , 617 85245538, 8060268, 0, NoRole
 rec-902-dup-0, abo, f, 3, 19830502, , paige, tapai, nsw, chain v a l ey bay, 2671, 1 3, hakea crescent, , 02 9631 508, 3111964, 8, NoRole
 rec-419-org,   usa, f, 27, 19890701, mr, ellie, strong, nsw, killabakh, 4740, 22, kingsford smith drive, ulinga, 02 10634514, 5769838, 7, NoRole
