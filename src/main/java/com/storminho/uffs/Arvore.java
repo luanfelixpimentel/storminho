@@ -56,10 +56,9 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
         double result;
         ins.setDataset(data);
         ins.setClassMissing();
-        System.out.println(data.checkInstance(ins));
         try {
             result = arv.classifyInstance(ins);
-            System.out.println("O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
+            System.out.println(ins + "\n" + "O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
             System.out.println();
         } catch (Exception ex) {
             System.out.println(ex);

@@ -24,7 +24,6 @@ import redis.clients.jedis.JedisPoolConfig;
 
 public class WordIndexSave extends BaseBasicBolt implements Serializable {
     Map<String, Set> indexes;
-    private OutputCollector _collector;
     
     @Override
     public void prepare(Map map, TopologyContext context) {
@@ -54,7 +53,7 @@ public class WordIndexSave extends BaseBasicBolt implements Serializable {
             }
         } catch(Exception e) {
           }
-        _collector.emit(new Values(word, lineId));
+        collector.emit(new Values(word, lineId));
     }   
     
     @Override
