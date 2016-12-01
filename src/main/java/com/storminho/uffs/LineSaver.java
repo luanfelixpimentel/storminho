@@ -13,6 +13,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
+
 import redis.clients.jedis.JedisPoolConfig;
 
 public class LineSaver extends BaseBasicBolt implements Serializable{

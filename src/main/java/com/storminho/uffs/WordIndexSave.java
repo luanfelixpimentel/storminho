@@ -17,6 +17,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.tuple.Values;
+
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -26,7 +27,7 @@ public class WordIndexSave extends BaseBasicBolt implements Serializable {
     
     @Override
     public void prepare(Map map, TopologyContext context) {
-        this.indexes = new HashMap<>();
+        this.indexes = new HashMap<String,Set>();
         Jedis jedis = null;
     }
         
@@ -73,4 +74,6 @@ public class WordIndexSave extends BaseBasicBolt implements Serializable {
             System.out.println();
         }
     }
+
 }
+
