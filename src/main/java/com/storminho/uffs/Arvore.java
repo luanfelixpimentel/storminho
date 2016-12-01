@@ -47,7 +47,6 @@ public class Arvore extends BaseRichBolt implements IRichBolt {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-
     }
 
     @Override
