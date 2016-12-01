@@ -33,7 +33,7 @@ public class LineSaver extends BaseBasicBolt implements Serializable{
         //Salva no formato [chave = rec0102][toda a linha incluindo o rec]
         jedis.set(key, line);
         String linha = jedis.get(key);
-        System.out.println(""+linha);
+        //  System.out.println("JEDIS"+linha);
         //pool.destroy();
     }
 
