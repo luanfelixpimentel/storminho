@@ -4,21 +4,34 @@ import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.tuple.Fields;
 
 import com.storminho.uffs.*;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
 
 public class RedisTestTopology {
 
   public static void main(String[] args) throws Exception {
-
+      
     TopologyBuilder builder = new TopologyBuilder();
+    
+    JedisPoolConfig poolConfig = new JedisPoolConfig();
+    poolConfig.setTestOnBorrow(true);
+    poolConfig.setTestOnReturn(true);
+    poolConfig.setMaxIdle(400);
+    // Tests whether connections are dead during idle periods
+    poolConfig.setTestWhileIdle(true);
+    poolConfig.setMaxTotal(400);
+    //configuring it for some good max value so that timeout don't occur
+    poolConfig.setMaxWaitMillis(120000);
+    JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
 
-    builder.setSpout("line-spout", new LineSpout(), 1);
+    builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
-    builder.setBolt("pair-generator", new PairGenerator(), 1).shuffleGrouping("line-saver");
-    builder.setBolt("redis-lookup", new RedisLookupBolt(), 1).shuffleGrouping("pair-generator");
-
+    builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
+    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");            
+    builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
 
     Config conf = new Config();
     conf.setDebug(false);

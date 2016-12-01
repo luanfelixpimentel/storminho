@@ -30,7 +30,5 @@ public class CSVPairCreator {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

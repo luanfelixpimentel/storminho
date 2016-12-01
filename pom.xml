@@ -20,6 +20,9 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
+          
+            <type>jar</type>
+
         </dependency>
         <dependency>
             <groupId>maven</groupId>
@@ -35,6 +38,9 @@
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-dev</artifactId>
             <version>3.9.0</version>
+
+            <type>jar</type>
+
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
@@ -50,6 +56,18 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <version>1.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.resare.id3j</groupId>
+            <artifactId>id3j</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
     <properties>
