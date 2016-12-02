@@ -21,7 +21,7 @@ public class LineSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(Variables.csvPath + "teste_small"));
+      reader = new BufferedReader(new FileReader(Variables.csvPath + "teste_small-10"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

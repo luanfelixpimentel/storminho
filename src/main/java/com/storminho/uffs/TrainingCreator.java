@@ -11,6 +11,7 @@ import org.apache.storm.task.OutputCollector;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeSet;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.tuple.Fields;
 import weka.core.DenseInstance;
@@ -19,9 +20,10 @@ import weka.core.Instances;
 public class TrainingCreator extends BaseRichBolt implements IRichBolt {
     PrintStream ps;
     double ss;
-    int paresPositivos, paresTotais;
+    int paresPositivos, paresTotais, trDup, trNao;
     Instances dataRaw;
     private WekaStorminho ws;
+    TreeSet<String> set;
 
 
     @Override
@@ -31,8 +33,9 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         } catch (Exception e) {
             System.out.println(e);
         }
-        ss = Variables.trainingSampleSize;
-        paresPositivos = paresTotais = 0;
+        set = null;
+        set = new TreeSet<String>();
+        paresPositivos = paresTotais = trDup = trNao = 0;
 
         //weka
         WekaStorminho ws = new WekaStorminho();
@@ -46,38 +49,27 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         Random random = new Random();
         int matchingInstances = (int)(ss * Variables.duplicatesTotal);
         double nonMatchRatio = (double)matchingInstances / Variables.totalPairs;
+        String id1 = tuple.getString(2), id2 = tuple.getString(3);
 
-        paresTotais++;
-        if (tuple.getInteger(1).equals(1)) {
-            if (random.nextDouble() < ss) { //ss = sample size
+        if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && id1.equals(id2)) { //só vai passar por esse if aqueles que não foram considerados ainda e aqueles que não são exatamente igual (as redundâncias)
+            paresTotais++;
+            if (SharedMethods.isDuplicata(id1, id2)) { //Vai contar quantos pares distintos são duplicatas
                 paresPositivos++;
-            } else {
+                System.out.println(id1 + "\n" + id2);//////////////////////////////////////////////////////////////////////////////////////////
+                if (random.nextDouble() < Variables.trainingSampleSize) { //ss = sample size
+                    trDup++; //Quantas duplicatas entraram no set de treinamento
+                } else {
+                    return;
+                }
+            } else if (nonMatchRatio <= random.nextDouble()) {
                 return;
+            } else {
+                trNao++; //Quantas não-duplicatas entraram no set de treinamento
             }
-        } else if (nonMatchRatio <= random.nextDouble()) {
-            return;
+            ins.setDataset(dataRaw);
+            ins.setClassValue((tuple.getInteger(1) == 1 ? "duplicata":"não-duplicata"));
+            dataRaw.add(ins);
         }
-        ins.setDataset(dataRaw);
-        ins.setClassValue((tuple.getInteger(1) == 1 ? "duplicata":"não-duplicata"));
-        dataRaw.add(ins);
-    }
-
-    //Write "frame" for the .arff file
-    private void initializeArrfFile() {
-        int qtdMethods = 0;
-
-        //get the quantity of methods that gonna be used
-        for (int aux = Variables.rankingMethods; aux != 0; aux = aux >> 1) {
-            if ((1 & aux) != 0) qtdMethods++;
-        }
-
-        ps.print("@relation trainingSet\n");
-        int columns = (Variables.attributesNumber - (Variables.fieldId + 1)) * qtdMethods;
-        for (int i = 0; i < columns; i++) {
-            ps.print("@attribute att" + i + " numeric\n");
-        }
-        ps.print("@attribute isDuplicate numeric\n@data\n");
-        ps.flush();
     }
 
     @Override
@@ -90,6 +82,9 @@ public class TrainingCreator extends BaseRichBolt implements IRichBolt {
         ps.print(dataRaw);
         ps.flush();
         ps.close();
-        System.out.println("\n\n\nPARES DUPLICADOS: " + paresPositivos + " PARES TOTAIS: " + paresTotais + "\n\n\n");
+        System.out.println("\n\n\nENTRARAM NO IF:\nPARES DUPLICATAS: " + paresPositivos + " PARES TOTAIS: " + paresTotais);
+        System.out.println();
+        System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + trDup + " e Negativos: " + trNao + "\n\n");
+        System.out.println("\n");
     }
 }

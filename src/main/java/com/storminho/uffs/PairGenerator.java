@@ -38,7 +38,7 @@ public class PairGenerator extends BaseRichBolt implements Serializable{
         try {
             Set<String> set = jedis.smembers(word);
             for (String toPair : set) {
-                 _collector.emit(new Values(jedis.get(toPair), jedis.get(lineId)));
+                 _collector.emit(new Values(jedis.get(toPair), jedis.get(lineId), toPair, lineId));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class PairGenerator extends BaseRichBolt implements Serializable{
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("line1", "line2"));
+      declarer.declare(new Fields("line1", "line2", "id1", "id2"));
     }
 
     @Override

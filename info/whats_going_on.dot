@@ -12,15 +12,15 @@ digraph projeto_topology {
     //spouts and bolts
     {
         node [shape="ellipse" color="green"]
-        linespout [label="Line Spout*", comment="teste"]
-        splitsentence [label="SplitSentence*"]
+        linespout [label="Line Spout", comment="teste"]
+        splitsentence [label="SplitSentence"]
         linesave [label="LineSave"]
         wordindexsave [label="WordIndexSave"]
-        pairranker [label="PairRanker*"]
+        pairranker [label="PairRanker"]
         pairgenerator [label="PairGenerator"]
         decisiontree [label="DecisionTree"]
-        counter [label="Counter*"]
-        trainingcreator [label="TrainingCreator*"]
+        counter [label="Counter"]
+        trainingcreator [label="TrainingCreator"]
     }
     //programas
     {
@@ -45,8 +45,7 @@ digraph projeto_topology {
         pairgenerator -> redis [label="[request]"]
         redis -> pairgenerator [label="[lista][tupla]"]
         pairgenerator -> pairranker [label="[:id:x:x:...][:id:x:x:...]"]
-        pairranker -> decisiontree [label="[weka:Instance][resposta_certa]"]
-        pairranker -> trainingcreator [label="[weka:Instance][resposta_certa]" style="dotted"]
+        pairranker -> {trainingcreator decisiontree} [label="[weka:Instance][resposta_certa]\n[id1][id2]"]
         trainingcreator -> trainingset [label="[weka:Instances]"]
         decisiontree -> counter [label="[resposta_decisiontree][resposta_certa]"]
         counter -> impressaofinal [label="Quando a topologia acabar, imprime os resultados"]

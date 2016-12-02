@@ -27,11 +27,11 @@ public class GuilhermeTopology {
 
     builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
-    builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
+    builder.setBolt("split-sentence", new SplitSentence(), 1).shuffleGrouping("line-spout");
     builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
-    builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
-//    builder.setBolt("pair-ranker", new PairRanker(), 2).shuffleGrouping("pair-generator");
-//    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("pair-generator", new PairGenerator(), 1).shuffleGrouping("index-save");
+    builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("pair-generator");
+    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
 //    builder.setBolt("decisiontree", new DecisionTree(), 1).shuffleGrouping("pair-ranker");
 //    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("decisiontree");
 
@@ -39,11 +39,11 @@ public class GuilhermeTopology {
     conf.setDebug(false);
 
     if (args != null && args.length > 0) {
-      conf.setNumWorkers(3);
+      conf.setNumWorkers(1);
       StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
     }
     else {
-      conf.setMaxTaskParallelism(3);
+      conf.setMaxTaskParallelism(1);
       LocalCluster cluster = new LocalCluster();
       cluster.submitTopology("word-count-topology", conf, builder.createTopology());
       System.out.println("\n\n\n=================================================");

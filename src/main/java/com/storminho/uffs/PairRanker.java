@@ -37,8 +37,7 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-//        System.out.println("[" + tuple.getString(0)+ " " +tuple.getString(1) + "]");
-        boolean duplicata = isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
+        boolean duplicata = SharedMethods.isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
         String tuple1[] = tuple.getString(0).split(Variables.splitChars);
         String tuple2[] = tuple.getString(1).split(Variables.splitChars);
         String store = "";
@@ -50,11 +49,11 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
                 if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
                 if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
                 if ((8 & Variables.rankingMethods) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
-                if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]); 
+                if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
             } catch (Exception e) {
                 e.printStackTrace();
                 for (int x = 0; x < tuple1.length; x++) {
-                    System.out.println("[" + tuple1[x] + "]");   
+                    System.out.println("[" + tuple1[x] + "]");
                     System.out.println("[" + tuple2[x] + "]");
                 }
                 System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
@@ -67,29 +66,13 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
         // System.out.println("Last:  " + dataRaw.lastInstance());
         // System.out.println("Number of Instances: " + dataRaw.numInstances());
 //         System.out.println("@" + inst);
-        
-        _collector.emit(new Values(inst, (duplicata ? 1:0)));
-    }
 
-    //this method only checks if two tuples are duplicatas according to the number in the first column
-    private boolean isDuplicata(String tupleA, String tupleB) {
-        //split the tuples' indexes to separe the identifier
-        String[] aSplit = tupleA.split(Variables.indexSplitToken);
-        String[] bSplit = tupleB.split(Variables.indexSplitToken);
-
-        //check if the identifier of both are equal
-        boolean flag = false;
-        try {
-            flag = (Integer.parseInt(aSplit[1]) == Integer.parseInt(bSplit[1]));
-        } catch (Exception e) {
-            System.out.println("com.storminho.uffs.PairRanker.isDuplicata()");
-        }
-            return flag;
+        _collector.emit(new Values(inst, (duplicata ? 1:0), tuple.getString(2), tuple.getString(3)));
     }
 
     @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("similaridade", "resposta_certa"));
+        declarer.declare(new Fields("similaridade", "resposta_certa", "id1", "id2"));
     }
 
     @Override
