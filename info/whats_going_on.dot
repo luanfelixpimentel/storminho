@@ -12,14 +12,14 @@ digraph projeto_topology {
     {
         node [shape="ellipse" color="green"]
         linespout [label="Line Spout", comment="teste"]
-        splitsentence [label="SplitSentence"]
+        splitsentence [label="SplitSentenceBolt"]
         linesave [label="LineSave"]
         wordindexsave [label="WordIndexSave"]
-        pairranker [label="PairRanker"]
+        pairranker [label="PairRankerBolt"]
         pairgenerator [label="PairGenerator"]
-        decisiontree [label="DecisionTree"]
-        counter [label="Counter"]
-        trainingcreator [label="TrainingCreator"]
+        decisiontree [label="DecisionTreeBolt"]
+        counter [label="CounterBolt"]
+        trainingcreator [label="TrainingCreatorBolt"]
     }
     //programas
     {

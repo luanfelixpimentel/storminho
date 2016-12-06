@@ -24,12 +24,12 @@ public class Variables {
     /* TrainingCreator =======================================================*/
     //Name of the output's file
     public static final String trainingOutputFile = "trainingSet.arff";
-    //Sample Size
-    public static final double trainingSampleSize = 0.5;
-    //Total de pares que vai ser processado
-    public static final long totalPairs = 20000;
-    //Duplicatas' total in dataset
-    public static final long duplicatesTotal = 2;
+    //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
+    public static final double SAMPLE_SIZE = 1.0;
+    //Quantas duplicatas existem no conjunto de teste
+    public static final int TOTAL_DUPLICATAS = 1;
+    //Quantos pares tem ao todo
+    public static final int TOTAL_PARES = 136;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:

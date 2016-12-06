@@ -1,7 +1,18 @@
-package com.storminho.uffs;
+/*
+PairRankerBolt
+Vai receber duas linhas para serem avaliadas. Aplicará os métodos definidos na constante Variables.rankingMethods.
+Terá como saída a similaridade das linhas recebidas e as duas linhas que recebeu como entrada.
+A similaridade é calculada nos campos das linhas. Cada campo terá sua similaridade calculada em todos os métodos ativos antes de ser calculado o próximo campo.
+Ex:
+Linha 1 = campo1:campo2:...
+Linha 2 = campoa:campob:...
+Métodos que serão utilizados: Jaccard e Leveshtein
+Saída: Jaccard(campo1, campoa), Levenshtein(campo1, campoa), Jaccard(campo2, campob), Levenshtein(campo2, campob), ..., classe
+A classe será a resposta certa se é ou não uma duplicata (Nos casos em que essa resposta esteja explícita através do campo ID das linhas) ou "?" caso contrário.
+*/
+package com.storminho.uffs.bolts;
 
-
-import java.util.ArrayList;
+import com.storminho.uffs.*;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
@@ -15,13 +26,11 @@ import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.StringMetrics;
 import org.apache.storm.tuple.Values;
 import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
 
 //simetria
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
-public class PairRanker extends BaseRichBolt implements IRichBolt {
+public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
     private StringMetric cosineSim, jaccardSim, jaroWinklerSim, levenshteinSim, qGramsDistanceSim;
     private OutputCollector _collector;
 
@@ -37,11 +46,12 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-        boolean duplicata = SharedMethods.isDuplicata(tuple.getString(0), tuple.getString(1)); //checa se são duplicatas
-        String tuple1[] = tuple.getString(0).split(Variables.splitChars);
-        String tuple2[] = tuple.getString(1).split(Variables.splitChars);
+        String linha1 = tuple.getString(0), linha2 = tuple.getString(1);
+        String tuple1[] = linha1.split(Variables.splitChars);
+        String tuple2[] = linha2.split(Variables.splitChars);
         String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
+
         //for for instance
         for (int i = 0, j = Variables.fieldId + 1; j < tuple1.length; j++) {
             try {
@@ -59,20 +69,15 @@ public class PairRanker extends BaseRichBolt implements IRichBolt {
                 System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
             }
         }
-        instanceValues[Variables.getFieldsNumber()] = (duplicata ? 1:0);
 
-        DenseInstance inst = new DenseInstance(1.0, instanceValues);
-        // System.out.println("First: " + dataRaw.firstInstance());
-        // System.out.println("Last:  " + dataRaw.lastInstance());
-        // System.out.println("Number of Instances: " + dataRaw.numInstances());
-//         System.out.println("@" + inst);
-
-        _collector.emit(new Values(inst, (duplicata ? 1:0), tuple.getString(2), tuple.getString(3)));
+        DenseInstance instance = new DenseInstance(1.0, instanceValues);
+        // System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
+        _collector.emit(new Values(instance, linha1, linha2));
     }
 
     @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("similaridade", "resposta_certa", "id1", "id2"));
+        declarer.declare(new Fields("weka:Instance", "linha1", "linha2"));
     }
 
     @Override

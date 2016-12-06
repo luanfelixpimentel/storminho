@@ -1,6 +1,7 @@
-package com.storminho.uffs;
+package com.storminho.uffs.bolts;
 
 
+import com.storminho.uffs.Variables;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import org.apache.storm.tuple.Values;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 
-public class DecisionTree extends BaseRichBolt implements IRichBolt {
+public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
     OutputCollector _collector;
     J48 arv;
     Instances data;
@@ -39,6 +40,7 @@ public class DecisionTree extends BaseRichBolt implements IRichBolt {
             arv = new J48();
             arv.setUnpruned(true);
             arv.buildClassifier(data);
+            reader.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -46,40 +48,30 @@ public class DecisionTree extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-        DenseInstance ins = (DenseInstance)tuple.getValues().get(0);
+        DenseInstance instance = (DenseInstance)tuple.getValue(0);
         double result = -1;
-        ins.setDataset(data);
-        ins.setClassMissing();
+        String linha1 = tuple.getString(1), linha2 = tuple.getString(2);
+
+        instance.setDataset(data);
+        instance.setClassMissing();
         try {
-            result = arv.classifyInstance(ins);
+            result = arv.classifyInstance(instance);
             //System.out.println(ins + "\n" + "O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
             //System.out.println();
         } catch (Exception ex) {
             System.out.println(ex);
-            Logger.getLogger(DecisionTree.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DecisionTreeBolt.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if ((int)(result + 0.5) != (int)result) {
-            System.out.print("//////////////////////////////////\n\n");
-            System.out.print("/Resposta    : " + result);
-            System.out.print("/Cast com 0.5: " + (int)(result + 0.5));
-            System.out.print("/Cast normal : " + (int)result);
-            System.out.print("//////////////////////////////////\n\n");
-
-        }
-        _collector.emit(new Values((int)(result + 0.5), tuple.getInteger(1)));
+//        System.out.println("[dt]" + (int)(result + 0.5) + "\n" + linha1 + "\n" + linha2 + "\n");
+        _collector.emit(new Values((int)(result + 0.5), linha1, linha2));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("resposta_arvore", "resposta_certa"));
+        declarer.declare(new Fields("weka:Instance", "Linha 1", "Linha 2"));
     }
 
     @Override
     public void cleanup() {
-        try {
-            reader.close();
-        } catch (IOException ex) {
-            Logger.getLogger(DecisionTree.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

@@ -17,14 +17,8 @@ public class SharedMethods {
         String[] aSplit = idA.split(Variables.indexSplitToken);
         String[] bSplit = idB.split(Variables.indexSplitToken);
 
-        //check if the identifier of both are equal
-        boolean flag = false;
-        try {
-            flag = (Integer.parseInt(aSplit[1]) == Integer.parseInt(bSplit[1]));
-        } catch (Exception e) {
-            System.out.println("com.storminho.uffs.PairRanker.isDuplicata()");
-        }
-            return flag;
+        //check if the identifier of both are equal and at least one have org
+        return aSplit[1].equals(bSplit[1]) && (aSplit[2].equals("org") ^ bSplit[2].equals("org"));
     }
 
     /**

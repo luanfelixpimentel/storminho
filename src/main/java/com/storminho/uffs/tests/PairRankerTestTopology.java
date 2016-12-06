@@ -1,12 +1,13 @@
 package com.storminho.uffs.tests;
 
+import com.storminho.uffs.bolts.CounterBolt;
+import com.storminho.uffs.bolts.DecisionTreeBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.tuple.Fields;
 
-import com.storminho.uffs.*;
+import com.storminho.uffs.bolts.PairRankerBolt;
 
 public class PairRankerTestTopology {
 
@@ -15,10 +16,10 @@ public class PairRankerTestTopology {
     TopologyBuilder builder = new TopologyBuilder();
 
     builder.setSpout("test-spout", new PairSpout(), 1);
-    builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("test-spout");
-    //builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("decisiontree", new DecisionTree(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("decisiontree");
+    builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("test-spout");
+//    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
 
     Config conf = new Config();
@@ -33,10 +34,8 @@ public class PairRankerTestTopology {
       LocalCluster cluster = new LocalCluster();
       cluster.submitTopology("test-topology", conf, builder.createTopology());
       System.out.println("\n\n\n=================================================");
-      System.out.println("Não há mais linhas. Entrando em modo sleep agora.");
+      System.out.println("Fim da Topologia.");
       System.out.println("=================================================\n\n\n");
-      Thread.sleep(10000);
-      cluster.shutdown();
     }
   }
 }

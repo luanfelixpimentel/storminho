@@ -22,7 +22,7 @@ public class PairSpout implements IRichSpout {
   public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
     _collector = collector;
     try {
-      reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-100-pairs.csv"));
+      reader = new BufferedReader(new FileReader(Variables.csvPath + "teste_small_mod"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -35,8 +35,6 @@ public class PairSpout implements IRichSpout {
           String line2 = reader.readLine();
           if (line2 != null) {
               this._collector.emit(new Values(line, line2));
-          } else {
-              Thread.sleep(1000);
           }
       } catch (Exception e) {
           e.printStackTrace();
@@ -45,7 +43,7 @@ public class PairSpout implements IRichSpout {
 
   @Override
   public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("line", "line2"));
+      declarer.declare(new Fields("line1", "line2"));
   }
 
   @Override

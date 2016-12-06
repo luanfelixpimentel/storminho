@@ -1,4 +1,5 @@
-package com.storminho.uffs;
+package com.storminho.uffs.bolts;
+
 import java.text.BreakIterator;
 
 import org.apache.storm.topology.BasicOutputCollector;
@@ -10,7 +11,7 @@ import org.apache.storm.tuple.Values;
 import com.storminho.uffs.Variables;
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
-public class SplitSentence extends BaseBasicBolt {
+public class SplitSentenceBolt extends BaseBasicBolt {
 
   //Execute is called to process tuples
   @Override
@@ -23,7 +24,7 @@ public class SplitSentence extends BaseBasicBolt {
             collector.emit(new Values(allWords[i], allWords[idField]));
 //            System.out.println(allWords[i]+ " # " +allWords[idField]);
         }
-        
+
     }
   }
 

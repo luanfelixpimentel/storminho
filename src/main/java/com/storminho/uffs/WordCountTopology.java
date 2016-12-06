@@ -1,5 +1,6 @@
 package com.storminho.uffs;
 
+import com.storminho.uffs.bolts.SplitSentenceBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -12,7 +13,7 @@ public class WordCountTopology {
     TopologyBuilder builder = new TopologyBuilder();
 
     builder.setSpout("line-spout", new LineSpout(), 5);
-    builder.setBolt("split-sentence", new SplitSentence(), 8).shuffleGrouping("line-spout");
+    builder.setBolt("split-sentence", new SplitSentenceBolt(), 8).shuffleGrouping("line-spout");
     // builder.setBolt("word-count", new WordCount(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
 

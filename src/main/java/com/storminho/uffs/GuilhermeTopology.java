@@ -1,5 +1,8 @@
 package com.storminho.uffs;
 
+import com.storminho.uffs.bolts.PairRankerBolt;
+import com.storminho.uffs.bolts.SplitSentenceBolt;
+import com.storminho.uffs.bolts.TrainingCreatorBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -27,11 +30,11 @@ public class GuilhermeTopology {
 
     builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
-    builder.setBolt("split-sentence", new SplitSentence(), 1).shuffleGrouping("line-spout");
+    builder.setBolt("split-sentence", new SplitSentenceBolt(), 1).shuffleGrouping("line-spout");
     builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGenerator(), 1).shuffleGrouping("index-save");
-    builder.setBolt("pair-ranker", new PairRanker(), 1).shuffleGrouping("pair-generator");
-    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("pair-generator");
+    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
 //    builder.setBolt("decisiontree", new DecisionTree(), 1).shuffleGrouping("pair-ranker");
 //    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("decisiontree");
 
