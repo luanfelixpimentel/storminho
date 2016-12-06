@@ -1,12 +1,11 @@
 digraph projeto_topology {
     node [style="filled"]
-    comments [shape="box" fillcolor="white" label="* Terminados"]
 
     //files
     {
         node [shape="box" color="yellow"]
         csv [label=".csv"]
-        impressaofinal [label="Impressao Final"]
+        impressaofinal [label="Impressão Final"]
         trainingset [label="trainingSet.arff"]
     }
     //spouts and bolts
@@ -35,20 +34,19 @@ digraph projeto_topology {
 
     //ligações
     {
-        csv -> linespout [label="[:id:x:x:...]\n[:id:x:x:...]\n[.]\n[.]\n[.]"]
-        linespout -> splitsentence [label="[:id:x:x:...]"]
-        linespout -> linesave [label="[:id:x:x:...]"]
-        linesave -> redis [label="[id][:id:x:x:...]"]
-        splitsentence -> wordindexsave [label="[x][id]"]
-        wordindexsave -> redis[label="[x][id]"]
-        wordindexsave -> pairgenerator [label="[x][id que foi salvo]"]
-        pairgenerator -> redis [label="[request]"]
-        redis -> pairgenerator [label="[lista][tupla]"]
-        pairgenerator -> pairranker [label="[:id:x:x:...][:id:x:x:...]"]
-        pairranker -> {trainingcreator decisiontree} [label="[weka:Instance][resposta_certa]\n[id1][id2]"]
+        csv -> linespout [label="[Linhas]"]
+        linespout -> {linesave splitsentence} [label="[Linha]"]
+        linesave -> redis [label="[ID:Linha]"]
+        splitsentence -> wordindexsave [label="[Palavra][ID]"]
+        wordindexsave -> redis [label="[Palavra:List(ID)]"]
+        wordindexsave -> pairgenerator [label="[Palavra][ID]"]
+        pairgenerator -> redis [label="[Requests: Palavras | IDs]"]
+        redis -> pairgenerator [label="[Linhas]"]
+        pairgenerator -> pairranker [label="[Linha 1][Linha 2]"]
+        pairranker -> {trainingcreator decisiontree} [label="[weka:Instance][Linha 1][Linha 2]"]
         trainingcreator -> trainingset [label="[weka:Instances]"]
-        decisiontree -> counter [label="[resposta_decisiontree][resposta_certa]"]
-        counter -> impressaofinal [label="Quando a topologia acabar, imprime os resultados"]
+        decisiontree -> counter [label="[Rª. DecisionTree][Linha 1][Linha 2]"]
+        counter -> impressaofinal [label="[Precisão][Revocação]"]
 
     }
 
