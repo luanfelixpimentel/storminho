@@ -19,12 +19,11 @@ public class GuilhermeTopology {
     JedisPoolConfig poolConfig = new JedisPoolConfig();
     poolConfig.setTestOnBorrow(true);
     poolConfig.setTestOnReturn(true);
-    poolConfig.setMaxIdle(400);
+    poolConfig.setMaxIdle(1024*10);//Setting the memory size //O SetMaxIdle é quanto da memória ele usa.
     // Tests whether connections are dead during idle periods
     poolConfig.setTestWhileIdle(true);
-    poolConfig.setMaxTotal(400);
-    //configuring it for some good max value so that timeout don't occur
-    poolConfig.setMaxWaitMillis(120000);
+   // poolConfig.setMaxTotal(400); 
+    //poolConfig.setMaxWaitMillis(120000);
     JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
 
 
