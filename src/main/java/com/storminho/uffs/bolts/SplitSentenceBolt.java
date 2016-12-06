@@ -1,3 +1,8 @@
+/*
+Entrada: Uma linha original do arquivo .csv
+Saida: O id dessa linha e um campo da linha. Todos os campos serão emitidos.
+Quebra a linha em algumas palavras e manda adiante, junto com o id, pra verificar a origem.
+*/
 package com.storminho.uffs.bolts;
 
 import java.text.BreakIterator;
@@ -16,8 +21,8 @@ public class SplitSentenceBolt extends BaseBasicBolt {
   //Execute is called to process tuples
   @Override
   public void execute(Tuple tuple, BasicOutputCollector collector) {
-    String[] allWords = tuple.getString(0).split(Variables.splitChars);
-    int idField = Variables.fieldId;
+    String[] allWords = tuple.getString(0).split(Variables.SPLIT_CHARS);
+    int idField = Variables.FIELD_ID;
     //Send every word from the tuple to collector, except the id
     for (int i = idField + 1; i < allWords.length; i++) { //print all to test
         if (!allWords[i].equals("")) {

@@ -1,3 +1,10 @@
+/*
+DecisionTreeBolt
+Entrada: Uma Instance da biblioteca Weka
+Saída: Classificação dessa Instance
+Simples implementação de uma árvore de decisão do tipo J48 sem poda
+*/
+
 package com.storminho.uffs.bolts;
 
 
@@ -34,7 +41,7 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
         //weka
         data = null;
         try {
-            reader = new BufferedReader(new FileReader(Variables.arffPath + Variables.trainingOutputFile));
+            reader = new BufferedReader(new FileReader(Variables.ARFF_PATH + Variables.TRAININGSET_OUTPUT_FILE));
             data = new Instances(reader);
             data.setClassIndex(data.numAttributes() - 1);
             arv = new J48();

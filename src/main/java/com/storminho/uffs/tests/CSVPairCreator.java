@@ -16,8 +16,8 @@ public class CSVPairCreator {
         String line = null;
         list = new ArrayList();
         try {
-            reader = new BufferedReader(new FileReader(Variables.csvPath + "cd-1000.csv"));
-            ps = new PrintStream(Variables.csvPath + "cd-1000-pairs.csv");
+            reader = new BufferedReader(new FileReader(Variables.CSV_PATH + "cd-1000.csv"));
+            ps = new PrintStream(Variables.CSV_PATH + "cd-1000-pairs.csv");
             for (line = reader.readLine(); line != null; line = reader.readLine()) {
                 list.add(line);
                 for (String str : list) {

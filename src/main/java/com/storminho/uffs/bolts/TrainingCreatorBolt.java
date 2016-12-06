@@ -1,10 +1,17 @@
-/**Bolt criado apenas pra evitar que o PairRanker tenha que lidar com arquivos */
+/*
+TrainingCreatorBolt
+Entrada: Uma Instance da biblioteca weka e 2 linhas originais do arquivo .csv
+Saída: Nada
+A Instance é a similaridade calculada entre as 2 linhas originais.
+O Bolt cria um set de treinamento com uma porcentagem de pares de linhas que são passados para ele.
+Esse treinamento é utilizado depois no DecisionTreeBolt.
+O treinamento é um arquivo .arff que é salva a cada vez que uma nova Instance é inserida.
+*/
 
 package com.storminho.uffs.bolts;
 
 import com.storminho.uffs.SharedMethods;
 import com.storminho.uffs.Variables;
-import com.storminho.uffs.WekaStorminho;
 import java.io.PrintStream;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
@@ -24,7 +31,6 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
     private PrintStream file;
     private int positiveTrainingPairs, negativeTrainingPairs, matchingInstances, allPairs, positivePairs;
     private Instances dataRaw;
-    private WekaStorminho ws;
     private TreeSet<String> set;
     private double nonMatchRatio, sampleSize;
     private Random random;
@@ -40,16 +46,15 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
         positiveTrainingPairs = negativeTrainingPairs = allPairs = positivePairs = 0;
 
         //weka
-        WekaStorminho ws = new WekaStorminho();
-        dataRaw = ws.newInstances("TrainingInstances");
+        dataRaw = SharedMethods.newInstances("TrainingInstances");
     }
 
     @Override
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2);
         DenseInstance instance = (DenseInstance)tuple.getValues().get(0);
-        String id1 = linha1.split(Variables.splitChars)[Variables.fieldId];
-        String id2 = linha2.split(Variables.splitChars)[Variables.fieldId];
+        String id1 = linha1.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID];
+        String id2 = linha2.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID];
 
         //só vai passar por esse if aqueles que não foram considerados ainda e aqueles que não são exatamente igual (as redundâncias)
         if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
@@ -72,7 +77,7 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
             instance.setClassValue((SharedMethods.isDuplicata(id1, id2) ? "duplicata":"não-duplicata"));
             dataRaw.add(instance);
             try {
-                file = new PrintStream(Variables.arffPath + Variables.trainingOutputFile);
+                file = new PrintStream(Variables.ARFF_PATH + Variables.TRAININGSET_OUTPUT_FILE);
                 file.print(dataRaw);
                 file.flush();
                 file.close();

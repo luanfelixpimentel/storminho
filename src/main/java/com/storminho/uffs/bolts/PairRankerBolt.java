@@ -1,7 +1,7 @@
 /*
 PairRankerBolt
-Vai receber duas linhas para serem avaliadas. Aplicará os métodos definidos na constante Variables.rankingMethods.
-Terá como saída a similaridade das linhas recebidas e as duas linhas que recebeu como entrada.
+Entrada: Linhas para serem avaliadas. Aplicará os métodos definidos na constante Variables.RANKING_METHODS.
+Saída: Similaridade das linhas recebidas e as duas linhas que recebeu como entrada.
 A similaridade é calculada nos campos das linhas. Cada campo terá sua similaridade calculada em todos os métodos ativos antes de ser calculado o próximo campo.
 Ex:
 Linha 1 = campo1:campo2:...
@@ -47,19 +47,19 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
     @Override
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(0), linha2 = tuple.getString(1);
-        String tuple1[] = linha1.split(Variables.splitChars);
-        String tuple2[] = linha2.split(Variables.splitChars);
+        String tuple1[] = linha1.split(Variables.SPLIT_CHARS);
+        String tuple2[] = linha2.split(Variables.SPLIT_CHARS);
         String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
 
         //for for instance
-        for (int i = 0, j = Variables.fieldId + 1; j < tuple1.length; j++) {
+        for (int i = 0, j = Variables.FIELD_ID + 1; j < tuple1.length; j++) {
             try {
-                if ((1 & Variables.rankingMethods) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
-                if ((2 & Variables.rankingMethods) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
-                if ((4 & Variables.rankingMethods) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
-                if ((8 & Variables.rankingMethods) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
-                if ((16 & Variables.rankingMethods) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
+                if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
+                if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
+                if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
+                if ((8 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
+                if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
             } catch (Exception e) {
                 e.printStackTrace();
                 for (int x = 0; x < tuple1.length; x++) {

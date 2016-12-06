@@ -1,4 +1,4 @@
-package com.storminho.uffs.templates;
+package com.storminho.uffs.bolts;
 
 
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -11,7 +11,7 @@ import org.apache.storm.task.OutputCollector;
 import java.util.Map;
 import org.apache.storm.task.TopologyContext;
 
-public class Bolt extends BaseRichBolt implements IRichBolt {
+public class EmptyBolt extends BaseRichBolt implements IRichBolt {
     OutputCollector _collector;
 
     @Override

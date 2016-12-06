@@ -1,3 +1,10 @@
+/*
+CounterBolt
+Entrada: duas linhas originais e a resposta dada pela árvore para a similaridade dessas duas linhas.
+Saída: Nada
+Enquanto a topologia roda, esse bolt imprimirá no terminal quanos Falsos/Verdadeiros Positivos/Negativos foram computados, a precisão e a revocação da árvore.
+*/
+
 package com.storminho.uffs.bolts;
 
 import com.storminho.uffs.SharedMethods;
@@ -27,7 +34,7 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2); //Linhas do arquivo csv
         boolean respostaArvore = tuple.getInteger(0) == 1; //Resposta que a árvore do Weka deu pra semelhança calculada entre esse par de linhas
-        String id1 = linha1.split(Variables.splitChars)[Variables.fieldId], id2 = linha2.split(Variables.splitChars)[Variables.fieldId]; //IDs das linhas (rec-XX-org/dup)
+        String id1 = linha1.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID], id2 = linha2.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID]; //IDs das linhas (rec-XX-org/dup)
 
         //Nesse if só vai entrar o par que ainda não foi processado e que não seja a mesma linha
         if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
