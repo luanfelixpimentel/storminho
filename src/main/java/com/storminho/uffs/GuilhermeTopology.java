@@ -49,10 +49,8 @@ public class GuilhermeTopology {
       LocalCluster cluster = new LocalCluster();
       cluster.submitTopology("word-count-topology", conf, builder.createTopology());
       System.out.println("\n\n\n=================================================");
-      System.out.println("Não há mais linha. Entrando em modo sleep agora.");
+      System.out.println("Topologia chegou ao fim de sua vida. Deixa pra trás 3 filhos. Rezemos.");
       System.out.println("=================================================\n\n\n");
-      Thread.sleep(10000);
-      cluster.shutdown();
     }
     pool.close();
   }

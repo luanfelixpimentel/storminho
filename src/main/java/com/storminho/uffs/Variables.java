@@ -25,11 +25,11 @@ public class Variables {
     //Name of the output's file
     public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
     //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
-    public static final double SAMPLE_SIZE = 1.0;
+    public static final double SAMPLE_SIZE = 0.5;
     //Quantas duplicatas existem no conjunto de teste
-    public static final int TOTAL_DUPLICATAS = 1;
+    public static final int TOTAL_DUPLICATAS = 100;
     //Quantos pares tem ao todo
-    public static final int TOTAL_PARES = 136;
+    public static final int TOTAL_PARES = 22000;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:

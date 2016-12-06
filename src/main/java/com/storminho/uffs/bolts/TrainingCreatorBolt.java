@@ -87,7 +87,7 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
             System.out.println("[tc] Total de pares: " + allPairs + " Pares positivos: " + positivePairs);
 
             //inform in console
-//             System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + positiveTrainingPairs + " e Negativos: " + negativeTrainingPairs + "\n");
+            // System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + positiveTrainingPairs + " e Negativos: " + negativeTrainingPairs + "\n");
         }
     }
 

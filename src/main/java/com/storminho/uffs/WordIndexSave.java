@@ -25,11 +25,11 @@ public class WordIndexSave extends BaseBasicBolt implements Serializable {
     @Override
     public void prepare(Map map, TopologyContext context) {
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
     }
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
+        jedis = pool.getResource();
         String word = tuple.getString(0);
         String lineId = tuple.getString(1);
 
