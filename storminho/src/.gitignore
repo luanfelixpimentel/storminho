@@ -1,0 +1,5 @@
+target
+*.out
+*.arff
+info/img.png
+src/main/java/com/storminho/uffs/lixo/

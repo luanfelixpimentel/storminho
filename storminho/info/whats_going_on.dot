@@ -1,0 +1,61 @@
+digraph projeto_topology {
+    node [style="filled"]
+
+    //files
+    {
+        node [shape="box" color="yellow"]
+        csv [label=".csv"]
+        impressaofinal [label="Impressão Final"]
+        trainingset [label="trainingSet.arff"]
+    }
+    //spouts and bolts
+    {
+        node [shape="ellipse" color="green"]
+        linespout [label="Line Spout", comment="teste"]
+        splitsentence [label="SplitSentenceBolt"]
+        linesave [label="LineSave"]
+        wordindexsave [label="WordIndexSave"]
+        pairranker [label="PairRankerBolt"]
+        pairgenerator [label="PairGenerator"]
+        decisiontree [label="DecisionTreeBolt"]
+        counter [label="CounterBolt"]
+        trainingcreator [label="TrainingCreatorBolt"]
+    }
+    //programas
+    {
+        node [shape="trapezium" color="orange"]
+    }
+
+    //outros
+    {
+        node [shape="diamond" color="black" fontcolor="white"]
+        redis [label="Redis"]
+    }
+
+    //ligações
+    {
+        csv -> linespout [label="[Linhas]"]
+        linespout -> {linesave splitsentence} [label="[Linha]"]
+        linesave -> redis [label="[ID:Linha]"]
+        splitsentence -> wordindexsave [label="[Palavra][ID]"]
+        wordindexsave -> redis [label="[Palavra:List(ID)]"]
+        wordindexsave -> pairgenerator [label="[Palavra][ID]"]
+        pairgenerator -> redis [label="[Requests: Palavras | IDs]"]
+        redis -> pairgenerator [label="[Linhas]"]
+        pairgenerator -> pairranker [label="[Linha 1][Linha 2]"]
+        pairranker -> {trainingcreator decisiontree} [label="[weka:Instance][Linha 1][Linha 2]"]
+        trainingcreator -> trainingset [label="[weka:Instances]"]
+        decisiontree -> counter [label="[Rª. DecisionTree][Linha 1][Linha 2]"]
+        counter -> impressaofinal [label="[Precisão][Revocação]"]
+
+    }
+
+    //ranks (posições)
+    {
+        {rank=same; splitsentence linesave}
+        {rank=same; pairgenerator redis}
+        {rank=same; pairranker trainingcreator}
+
+
+    }
+}
