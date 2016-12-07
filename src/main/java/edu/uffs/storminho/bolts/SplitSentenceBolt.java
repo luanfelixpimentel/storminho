@@ -35,6 +35,6 @@ public class SplitSentenceBolt extends BaseBasicBolt {
 
   @Override
   public void declareOutputFields(OutputFieldsDeclarer declarer) {
-    declarer.declare(new Fields("word", "id"));
+    declarer.declare(new Fields("Palavra", "ID"));
   }
 }

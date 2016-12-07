@@ -75,7 +75,7 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("weka:Instance", "Linha 1", "Linha 2"));
+        declarer.declare(new Fields("Rª. DecisionTree", "Linha 1", "Linha 2"));
     }
 
     @Override

@@ -13,11 +13,10 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 
 
-public class LineSaver extends BaseRichBolt implements IRichBolt{
+public class LineSaverBolt extends BaseRichBolt implements IRichBolt{
 
     OutputCollector _collector;
     Jedis jedis;
-    //JedisPool pool;
 
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
        _collector = collector;
@@ -30,9 +29,6 @@ public class LineSaver extends BaseRichBolt implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
-        //  pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-       // jedis = pool.getResource();
-       // jedis.bgsave();
         String key = tuple.getString(0).split(Variables.SPLIT_CHARS)[Variables.FIELD_ID];
         String line = tuple.getString(0);
 
@@ -40,19 +36,13 @@ public class LineSaver extends BaseRichBolt implements IRichBolt{
         if(!key.equals("")) {
             jedis.set(key, line);
             String linha = jedis.get(key);
-         //   pool.close();
         }
-        //  System.out.println("JEDIS"+linha);
-       // jedis.shutdown();
-    }
-     @Override
-        public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("lineId"));
     }
 
     @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {}
+
+    @Override
     public void cleanup() {
-        //pool.close();
-        //pool.destroy();
     }
 }

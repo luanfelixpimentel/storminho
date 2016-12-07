@@ -47,13 +47,15 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
     @Override
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(0), linha2 = tuple.getString(1);
+
+        // entry test
+    //    System.out.println("[pr] " + linha1 + "\n" + linha2);
+
         String tuple1[] = linha1.split(Variables.SPLIT_CHARS);
         String tuple2[] = linha2.split(Variables.SPLIT_CHARS);
         String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
 
-        // entry test
-//        System.out.println("[pr] " + linha1 + "\n" + linha2);
 
         //for for instance
         for (int i = 0, j = Variables.FIELD_ID + 1; j < tuple1.length; j++) {

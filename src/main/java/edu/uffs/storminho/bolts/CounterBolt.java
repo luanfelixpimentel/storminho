@@ -50,6 +50,7 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
                 System.out.println("Falsos Positivos: " + fp + " Falsos Negativos: " + fn);
                 System.out.println("Verdadeiros Positivos: " + vp + " Verdadeiros Negativos: " + vn);
                 System.out.println("Precisão: " + 1.0 * vp / (vp + fp) + " Revocação: " + 1.0 * vp / (vp + fn));
+                System.out.println((vp + vn + fp + fn) / 1000 + " mil pares computados.");
                 System.out.println();
             }
 

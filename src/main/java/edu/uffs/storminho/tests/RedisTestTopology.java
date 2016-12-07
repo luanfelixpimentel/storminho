@@ -6,7 +6,9 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 
 import edu.uffs.storminho.*;
+import edu.uffs.storminho.bolts.PairGeneratorBolt;
 import edu.uffs.storminho.bolts.SplitSentenceBolt;
+import edu.uffs.storminho.bolts.WordIndexSaveBolt;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -29,10 +31,10 @@ public class RedisTestTopology {
     JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
 
     builder.setSpout("line-spout", new LineSpout());
-    builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
+    builder.setBolt("line-saver", new LineSaverBolt(), 1).shuffleGrouping("line-spout");
     builder.setBolt("split-sentence", new SplitSentenceBolt(), 8).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
-    builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
+    builder.setBolt("index-save", new WordIndexSaveBolt(), 1).shuffleGrouping("split-sentence");
+    builder.setBolt("pair-generator", new PairGeneratorBolt(), 2).shuffleGrouping("index-save");
 
     Config conf = new Config();
     conf.setDebug(false);

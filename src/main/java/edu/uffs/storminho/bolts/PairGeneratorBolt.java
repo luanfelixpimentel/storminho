@@ -1,4 +1,4 @@
-package edu.uffs.storminho;
+package edu.uffs.storminho.bolts;
 
 import java.util.Set;
 import java.util.Map;
@@ -13,10 +13,8 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
-public class PairGenerator extends BaseRichBolt implements IRichBolt{
+public class PairGeneratorBolt extends BaseRichBolt implements IRichBolt{
 
     OutputCollector _collector;
     Jedis jedis;
@@ -36,15 +34,17 @@ public class PairGenerator extends BaseRichBolt implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
-        //JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-       // jedis = pool.getResource();
-       // jedis.bgsave();
         String word = tuple.getString(0);
         String lineId = tuple.getString(1);
+        String linha1 = jedis.get(lineId);
         try {
             Set<String> set = jedis.smembers(word);
             for (String toPair : set) {
-                 _collector.emit(new Values(jedis.get(toPair), jedis.get(lineId)));
+                String linha2 = jedis.get(toPair);
+                 _collector.emit(new Values(linha1, linha2));
+
+                 //out test
+                //  System.out.println("[pg] " + linha1 + "\n" + linha2 + "\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class PairGenerator extends BaseRichBolt implements IRichBolt{
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("line1", "line2"));
+      declarer.declare(new Fields("Linha 1", "Linha 2"));
     }
 
     @Override

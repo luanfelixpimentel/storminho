@@ -1,4 +1,4 @@
-package edu.uffs.storminho;
+package edu.uffs.storminho.bolts;
 
 import redis.clients.jedis.Jedis;
 
@@ -15,11 +15,10 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Values;
 
 
-public class WordIndexSave extends BaseRichBolt implements IRichBolt {
+public class WordIndexSaveBolt extends BaseRichBolt implements IRichBolt {
 
     OutputCollector _collector;
     Jedis jedis;
-    //JedisPool pool;
 
     @Override
     public void prepare(Map map, TopologyContext context,  OutputCollector collector) {
@@ -33,9 +32,6 @@ public class WordIndexSave extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-       // pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-       // jedis = pool.getResource();
-       // jedis.bgsave();
         String word = tuple.getString(0);
         String lineId = tuple.getString(1);
 
@@ -59,7 +55,7 @@ public class WordIndexSave extends BaseRichBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("word", "count"));
+      declarer.declare(new Fields("Palavra", "ID"));
     }
 
     @Override

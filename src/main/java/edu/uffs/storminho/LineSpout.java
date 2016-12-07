@@ -27,23 +27,21 @@ public class LineSpout implements IRichSpout {
     }
   }
 
-  @Override
-  public void nextTuple() {
-      try {
-          String line = reader.readLine();
-          if (line != null) {
-              this._collector.emit(new Values(line));
-          } else {
-              Thread.sleep(10000);
-          }
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-  }
+    @Override
+    public void nextTuple() {
+        try {
+            String line = reader.readLine();
+            if (line != null) {
+                this._collector.emit(new Values(line));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
   @Override
   public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("line"));
+      declarer.declare(new Fields("Linha"));
   }
 
   @Override
