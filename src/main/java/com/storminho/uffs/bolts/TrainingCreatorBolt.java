@@ -41,7 +41,7 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
         set = new TreeSet<String>();
         sampleSize = Variables.SAMPLE_SIZE;
         matchingInstances = (int)(Variables.SAMPLE_SIZE * Variables.TOTAL_DUPLICATAS);
-        nonMatchRatio = matchingInstances / Variables.TOTAL_PARES;
+        nonMatchRatio = (double)matchingInstances / (double)Variables.TOTAL_PARES;
         random = new Random();
         positiveTrainingPairs = negativeTrainingPairs = allPairs = positivePairs = 0;
 
@@ -59,6 +59,9 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
         //só vai passar por esse if aqueles que não foram considerados ainda e aqueles que não são exatamente igual (as redundâncias)
         if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
             allPairs++;
+            //before run
+            if (allPairs % 1000 == 0) System.out.println("[tc] Total de pares: " + allPairs + " Pares positivos: " + positivePairs);
+            
             if (SharedMethods.isDuplicata(id1, id2)) { //Vai contar quantos desses pares distintos são duplicatas
                 positivePairs++;
                 if (random.nextDouble() < sampleSize) { //ss = sample size
@@ -66,7 +69,8 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
                 } else {
                     return;
                 }
-            } else if (nonMatchRatio <= random.nextDouble() ) {
+//            } else if (nonMatchRatio <= random.nextDouble() ) {
+            } else if (0.00001 <= random.nextDouble() ) {
                 return;
             } else {
                 negativeTrainingPairs++; //Quantas não-duplicatas entraram no set de treinamento
@@ -82,12 +86,9 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
                 file.flush();
                 file.close();
             } catch (Exception e) { System.out.println(e); }
-
-            //before run
-            System.out.println("[tc] Total de pares: " + allPairs + " Pares positivos: " + positivePairs);
-
+            
             //inform in console
-            // System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + positiveTrainingPairs + " e Negativos: " + negativeTrainingPairs + "\n");
+             System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + positiveTrainingPairs + " e Negativos: " + negativeTrainingPairs + "\n");
         }
     }
 

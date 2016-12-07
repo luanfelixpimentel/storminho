@@ -1,8 +1,11 @@
 package com.storminho.uffs;
 
+import com.storminho.uffs.bolts.CounterBolt;
+import com.storminho.uffs.bolts.DecisionTreeBolt;
 import com.storminho.uffs.bolts.PairRankerBolt;
 import com.storminho.uffs.bolts.SplitSentenceBolt;
 import com.storminho.uffs.bolts.TrainingCreatorBolt;
+import java.util.concurrent.TimeUnit;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -14,28 +17,26 @@ import redis.clients.jedis.JedisPoolConfig;
 public class GuilhermeTopology {
 
   public static void main(String[] args) throws Exception {
-
+    
     TopologyBuilder builder = new TopologyBuilder();
-    JedisPoolConfig poolConfig = new JedisPoolConfig();
-    poolConfig.setTestOnBorrow(true);
-    poolConfig.setTestOnReturn(true);
-    poolConfig.setMaxIdle(1024*10);//Setting the memory size //O SetMaxIdle é quanto da memória ele usa.
-    // Tests whether connections are dead during idle periods
-    poolConfig.setTestWhileIdle(true);
-   // poolConfig.setMaxTotal(400); 
-    //poolConfig.setMaxWaitMillis(120000);
-    JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+
+//    JedisPoolConfig poolConfig = new JedisPoolConfig();
+//    poolConfig.setTestOnBorrow(true);
+//    poolConfig.setTestOnReturn(true);
+//    poolConfig.setMaxTotal(1);
+//    poolConfig.setMaxWaitMillis(TimeUnit.SECONDS.toMillis(60));
+//    JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
 
 
     builder.setSpout("line-spout", new LineSpout());
-    builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
-    builder.setBolt("split-sentence", new SplitSentenceBolt(), 1).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
-    builder.setBolt("pair-generator", new PairGenerator(), 1).shuffleGrouping("index-save");
-    builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("pair-generator");
-    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
-//    builder.setBolt("decisiontree", new DecisionTree(), 1).shuffleGrouping("pair-ranker");
-//    builder.setBolt("counter", new Counter(), 1).shuffleGrouping("decisiontree");
+    builder.setBolt("line-saver", new LineSaver(), 5).shuffleGrouping("line-spout");
+    builder.setBolt("split-sentence", new SplitSentenceBolt(), 5).shuffleGrouping("line-spout");
+    builder.setBolt("index-save", new WordIndexSave(), 5).shuffleGrouping("split-sentence");
+    builder.setBolt("pair-generator", new PairGenerator(), 10).shuffleGrouping("index-save");
+    builder.setBolt("pair-ranker", new PairRankerBolt(), 5).shuffleGrouping("pair-generator");
+//    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
     Config conf = new Config();
     conf.setDebug(false);
@@ -52,6 +53,6 @@ public class GuilhermeTopology {
       System.out.println("Topologia chegou ao fim de sua vida. Deixa pra trás 3 filhos. Rezemos.");
       System.out.println("=================================================\n\n\n");
     }
-    pool.close();
+//    pool.close();
   }
 }

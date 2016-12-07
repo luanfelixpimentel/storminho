@@ -46,10 +46,13 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
                 else vn++;
             }
             // System.out.println("[c] " + respostaArvore);
-            System.out.println("Falsos Positivos: " + fp + " Falsos Negativos: " + fn);
-            System.out.println("Verdadeiros Positivos: " + vp + " Verdadeiros Negativos: " + vn);
-            System.out.println("Precisão: " + 1.0 * vp / (vp + fp) + " Revocação: " + 1.0 * vp / (vp + fn));
-            System.out.println();
+            if ((vp + vn + fp + fn) % 100 == 0) {
+                System.out.println("Falsos Positivos: " + fp + " Falsos Negativos: " + fn);
+                System.out.println("Verdadeiros Positivos: " + vp + " Verdadeiros Negativos: " + vn);
+                System.out.println("Precisão: " + 1.0 * vp / (vp + fp) + " Revocação: " + 1.0 * vp / (vp + fn));
+                System.out.println();
+            }
+            
         }
     }
 
