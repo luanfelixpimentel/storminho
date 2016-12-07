@@ -16,10 +16,11 @@ public class PairRankerTestTopology {
     TopologyBuilder builder = new TopologyBuilder();
 
     builder.setSpout("test-spout", new PairSpout(), 1);
+    builder.setBolt("line-saver2", new LinhaSalvadora(), 1).shuffleGrouping("test-spout");
     builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("test-spout");
 //    builder.setBolt("training-creator", new TrainingCreator(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
+//    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
 
     Config conf = new Config();

@@ -53,7 +53,7 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
 
         // entry test
-        System.out.println("[pr] " + linha1 + "\n" + linha2);
+//        System.out.println("[pr] " + linha1 + "\n" + linha2);
 
         //for for instance
         for (int i = 0, j = Variables.FIELD_ID + 1; j < tuple1.length; j++) {
@@ -74,7 +74,10 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
         }
 
         DenseInstance instance = new DenseInstance(1.0, instanceValues);
-        System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
+        
+        //out test
+//        System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
+
         _collector.emit(new Values(instance, linha1, linha2));
     }
 
