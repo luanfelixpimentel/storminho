@@ -26,9 +26,9 @@ public class GuilhermeTopology {
     builder.setBolt("index-save", new WordIndexSaveBolt(), 5).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGeneratorBolt(), 10).shuffleGrouping("index-save");
     builder.setBolt("pair-ranker", new PairRankerBolt(), 10).shuffleGrouping("pair-generator");
-//    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
+    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+//    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
     Config conf = new Config();
     conf.setDebug(false);

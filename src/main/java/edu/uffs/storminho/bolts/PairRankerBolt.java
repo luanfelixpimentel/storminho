@@ -58,7 +58,7 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
 
 
         //for for instance
-        for (int i = 0, j = Variables.FIELD_ID + 1; j < tuple1.length; j++) {
+        for (int i = 0, j = Variables.FIELD_ID + 1; j < Variables.ATTRIBUTES_NUMBER; j++) {
             try {
                 if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
                 if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);

@@ -14,11 +14,11 @@ public class Variables {
 
     /* .csv related ==========================================================*/
     //Where the tuple is gonna be split
-    public static final String SPLIT_CHARS = ",";
+    public static final String SPLIT_CHARS = ":";
     //Which tuple's column holds the id field
-    public static final int FIELD_ID = 0;
+    public static final int FIELD_ID = 1;
     //how many columns does the csv have in total
-    public final static int ATTRIBUTES_NUMBER = 18;
+    public final static int ATTRIBUTES_NUMBER = 12;
 
 
     /* TrainingCreator =======================================================*/
