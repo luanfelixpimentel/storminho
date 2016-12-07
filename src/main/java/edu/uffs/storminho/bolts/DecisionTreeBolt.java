@@ -5,10 +5,10 @@ Saída: Classificação dessa Instance
 Simples implementação de uma árvore de decisão do tipo J48 sem poda
 */
 
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
 
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.Variables;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

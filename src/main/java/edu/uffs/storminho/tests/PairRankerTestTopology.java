@@ -1,13 +1,13 @@
-package com.storminho.uffs.tests;
+package edu.uffs.storminho.tests;
 
-import com.storminho.uffs.bolts.CounterBolt;
-import com.storminho.uffs.bolts.DecisionTreeBolt;
+import edu.uffs.storminho.bolts.CounterBolt;
+import edu.uffs.storminho.bolts.DecisionTreeBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 
-import com.storminho.uffs.bolts.PairRankerBolt;
+import edu.uffs.storminho.bolts.PairRankerBolt;
 
 public class PairRankerTestTopology {
 

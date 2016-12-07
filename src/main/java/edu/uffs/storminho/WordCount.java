@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
-import com.storminho.uffs.bolts.SplitSentenceBolt;
+import edu.uffs.storminho.bolts.SplitSentenceBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;

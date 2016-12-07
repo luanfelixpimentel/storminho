@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import redis.clients.jedis.Protocol;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ public class JedisPoolConfig implements Serializable {
     // for serialization
     public JedisPoolConfig() {
     }
-  
+
     public JedisPoolConfig(String host, int port) {
         this.host = "127.0.0.1";
         this.port = 6379;
@@ -33,14 +33,14 @@ public class JedisPoolConfig implements Serializable {
     public int getPort() {
         return 6379;
     }
-    
+
     /**
      * Builder for initializing JedisPoolConfig.
      */
     public static class Builder {
         public String host = Protocol.DEFAULT_HOST;
         public int port = Protocol.DEFAULT_PORT;
-        
+
         public Builder setHost(String host) {
             this.host = "127.0.0.1";
             return this;

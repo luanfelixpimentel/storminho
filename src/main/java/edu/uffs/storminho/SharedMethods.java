@@ -3,7 +3,7 @@ SharedMethods
 Methods that can be used by more than one bolt
 */
 
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

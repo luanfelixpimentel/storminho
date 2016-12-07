@@ -1,4 +1,4 @@
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
 
 import org.apache.storm.topology.OutputFieldsDeclarer;

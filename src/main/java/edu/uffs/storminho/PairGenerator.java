@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import java.util.Set;
 import java.util.Map;
@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class PairGenerator extends BaseRichBolt implements IRichBolt{
-    
+
     OutputCollector _collector;
     Jedis jedis;
     //JedisPool pool;
@@ -44,7 +44,7 @@ public class PairGenerator extends BaseRichBolt implements IRichBolt{
         try {
             Set<String> set = jedis.smembers(word);
             for (String toPair : set) {
-                 _collector.emit(new Values(jedis.get(toPair), jedis.get(lineId)));       
+                 _collector.emit(new Values(jedis.get(toPair), jedis.get(lineId)));
             }
         } catch (Exception e) {
             e.printStackTrace();

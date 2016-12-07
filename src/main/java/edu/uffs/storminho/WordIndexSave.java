@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import redis.clients.jedis.Jedis;
 
@@ -16,11 +16,11 @@ import org.apache.storm.tuple.Values;
 
 
 public class WordIndexSave extends BaseRichBolt implements IRichBolt {
-    
+
     OutputCollector _collector;
     Jedis jedis;
     //JedisPool pool;
-    
+
     @Override
     public void prepare(Map map, TopologyContext context,  OutputCollector collector) {
        _collector = collector;
@@ -49,11 +49,11 @@ public class WordIndexSave extends BaseRichBolt implements IRichBolt {
                 // Set<String> set = jedis.smembers(word);
                 // for (String aux : set) { System.out.print(aux + ", "); }
                 // System.out.println();
-              
+
             }
         } catch(Exception e) {
             e.printStackTrace();
-            
+
         }
     }
 

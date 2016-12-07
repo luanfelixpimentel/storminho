@@ -5,10 +5,10 @@ Saída: Nada
 Enquanto a topologia roda, esse bolt imprimirá no terminal quanos Falsos/Verdadeiros Positivos/Negativos foram computados, a precisão e a revocação da árvore.
 */
 
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
-import com.storminho.uffs.SharedMethods;
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.SharedMethods;
+import edu.uffs.storminho.Variables;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
@@ -52,7 +52,7 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
                 System.out.println("Precisão: " + 1.0 * vp / (vp + fp) + " Revocação: " + 1.0 * vp / (vp + fn));
                 System.out.println();
             }
-            
+
         }
     }
 

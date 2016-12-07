@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 public class Variables {
     /* General ===============================================================*/
@@ -25,11 +25,11 @@ public class Variables {
     //Name of the output's file
     public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
     //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
-    public static final double SAMPLE_SIZE = 0.5;
+    public static final double SAMPLE_SIZE = 0.1;
     //Quantas duplicatas existem no conjunto de teste
-    public static final int TOTAL_DUPLICATAS = 10;
+    public static final int TOTAL_DUPLICATAS = 100;
     //Quantos pares tem ao todo
-    public static final int TOTAL_PARES = 509000;
+    public static final int TOTAL_PARES = 604000;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:

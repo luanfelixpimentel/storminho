@@ -1,12 +1,12 @@
-package com.storminho.uffs.tests;
+package edu.uffs.storminho.tests;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 
-import com.storminho.uffs.*;
-import com.storminho.uffs.bolts.SplitSentenceBolt;
+import edu.uffs.storminho.*;
+import edu.uffs.storminho.bolts.SplitSentenceBolt;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -14,9 +14,9 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisTestTopology {
 
   public static void main(String[] args) throws Exception {
-      
+
     TopologyBuilder builder = new TopologyBuilder();
-    
+
     JedisPoolConfig poolConfig = new JedisPoolConfig();
     poolConfig.setTestOnBorrow(true);
     poolConfig.setTestOnReturn(true);
@@ -31,7 +31,7 @@ public class RedisTestTopology {
     builder.setSpout("line-spout", new LineSpout());
     builder.setBolt("line-saver", new LineSaver(), 1).shuffleGrouping("line-spout");
     builder.setBolt("split-sentence", new SplitSentenceBolt(), 8).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");            
+    builder.setBolt("index-save", new WordIndexSave(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGenerator(), 2).shuffleGrouping("index-save");
 
     Config conf = new Config();

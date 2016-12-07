@@ -1,4 +1,4 @@
-package com.storminho.uffs.tests;
+package edu.uffs.storminho.tests;
 
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.storm.topology.IRichSpout;
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.Variables;
 
 public class PairSpout implements IRichSpout {
   private SpoutOutputCollector _collector;

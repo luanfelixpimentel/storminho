@@ -3,7 +3,7 @@ Entrada: Uma linha original do arquivo .csv
 Saida: O id dessa linha e um campo da linha. Todos os campos serão emitidos.
 Quebra a linha em algumas palavras e manda adiante, junto com o id, pra verificar a origem.
 */
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
 import java.text.BreakIterator;
 
@@ -13,7 +13,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.Variables;
 
 //There are a variety of bolt types. In this case, we use BaseBasicBolt
 public class SplitSentenceBolt extends BaseBasicBolt {

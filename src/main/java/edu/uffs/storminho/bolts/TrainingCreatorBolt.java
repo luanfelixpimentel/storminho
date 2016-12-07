@@ -8,10 +8,10 @@ Esse treinamento é utilizado depois no DecisionTreeBolt.
 O treinamento é um arquivo .arff que é salva a cada vez que uma nova Instance é inserida.
 */
 
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
-import com.storminho.uffs.SharedMethods;
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.SharedMethods;
+import edu.uffs.storminho.Variables;
 import java.io.PrintStream;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
@@ -60,8 +60,8 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
         if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
             allPairs++;
             //before run
-            if (allPairs % 1000 == 0) System.out.println("[tc] Total de pares: " + allPairs + " Pares positivos: " + positivePairs);
-            
+            if (allPairs % 1000 == 0) System.out.println("[tc] Total de pares: " + allPairs / 1000 + " mil. Pares positivos: " + positivePairs);
+
             if (SharedMethods.isDuplicata(id1, id2)) { //Vai contar quantos desses pares distintos são duplicatas
                 positivePairs++;
                 if (random.nextDouble() < sampleSize) { //ss = sample size
@@ -69,8 +69,8 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
                 } else {
                     return;
                 }
-//            } else if (nonMatchRatio <= random.nextDouble() ) {
-            } else if (0.00001 <= random.nextDouble() ) {
+            } else if (nonMatchRatio <= random.nextDouble() ) {
+            // } else if (0.00001 <= random.nextDouble() ) {
                 return;
             } else {
                 negativeTrainingPairs++; //Quantas não-duplicatas entraram no set de treinamento
@@ -86,7 +86,7 @@ public class TrainingCreatorBolt extends BaseRichBolt implements IRichBolt {
                 file.flush();
                 file.close();
             } catch (Exception e) { System.out.println(e); }
-            
+
             //inform in console
              System.out.println("ENTRARAM NO TREINAMENTO:\nPositivos: " + positiveTrainingPairs + " e Negativos: " + negativeTrainingPairs + "\n");
         }

@@ -1,7 +1,7 @@
-package com.storminho.uffs.tests;
+package edu.uffs.storminho.tests;
 
 
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.Variables;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;

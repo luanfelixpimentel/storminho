@@ -1,4 +1,4 @@
-package com.storminho.uffs;
+package edu.uffs.storminho;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class LineSaver extends BaseRichBolt implements IRichBolt{
     OutputCollector _collector;
     Jedis jedis;
     //JedisPool pool;
-    
+
     public void prepare(Map map, TopologyContext context, OutputCollector collector) {
        _collector = collector;
         try {
@@ -35,7 +35,7 @@ public class LineSaver extends BaseRichBolt implements IRichBolt{
        // jedis.bgsave();
         String key = tuple.getString(0).split(Variables.SPLIT_CHARS)[Variables.FIELD_ID];
         String line = tuple.getString(0);
-        
+
         //Salva no formato [chave = rec0102][toda a linha incluindo o rec]
         if(!key.equals("")) {
             jedis.set(key, line);
@@ -49,7 +49,7 @@ public class LineSaver extends BaseRichBolt implements IRichBolt{
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields("lineId"));
     }
-    
+
     @Override
     public void cleanup() {
         //pool.close();

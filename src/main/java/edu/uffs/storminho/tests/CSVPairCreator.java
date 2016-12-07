@@ -1,7 +1,7 @@
 //faz a combinação quadratica de todos os registros de um determinado arquivo csv para criar um novo arquivo a ser lido pelo PairSpout
-package com.storminho.uffs.tests;
+package edu.uffs.storminho.tests;
 
-import com.storminho.uffs.Variables;
+import edu.uffs.storminho.Variables;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintStream;

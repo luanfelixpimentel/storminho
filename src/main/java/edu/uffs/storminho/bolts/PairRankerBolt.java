@@ -10,9 +10,9 @@ Métodos que serão utilizados: Jaccard e Leveshtein
 Saída: Jaccard(campo1, campoa), Levenshtein(campo1, campoa), Jaccard(campo2, campob), Levenshtein(campo2, campob), ..., classe
 A classe será a resposta certa se é ou não uma duplicata (Nos casos em que essa resposta esteja explícita através do campo ID das linhas) ou "?" caso contrário.
 */
-package com.storminho.uffs.bolts;
+package edu.uffs.storminho.bolts;
 
-import com.storminho.uffs.*;
+import edu.uffs.storminho.*;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
@@ -74,7 +74,7 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
         }
 
         DenseInstance instance = new DenseInstance(1.0, instanceValues);
-        
+
         //out test
 //        System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
 
