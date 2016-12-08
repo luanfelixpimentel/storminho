@@ -21,14 +21,14 @@ public class GuilhermeTopology {
     jedis.flushAll();
 
     builder.setSpout("line-spout", new LineSpout());
-    builder.setBolt("line-saver", new LineSaverBolt(), 5).shuffleGrouping("line-spout");
-    builder.setBolt("split-sentence", new SplitSentenceBolt(), 5).shuffleGrouping("line-spout");
-    builder.setBolt("index-save", new WordIndexSaveBolt(), 5).shuffleGrouping("split-sentence");
+    builder.setBolt("line-saver", new LineSaverBolt(), 1).shuffleGrouping("line-spout");
+    builder.setBolt("split-sentence", new SplitSentenceBolt(), 1).shuffleGrouping("line-spout");
+    builder.setBolt("index-save", new WordIndexSaveBolt(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGeneratorBolt(), 10).shuffleGrouping("index-save");
-    builder.setBolt("pair-ranker", new PairRankerBolt(), 10).shuffleGrouping("pair-generator");
-    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
-//    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
-//    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
+    builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("pair-generator");
+//    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
     Config conf = new Config();
     conf.setDebug(false);

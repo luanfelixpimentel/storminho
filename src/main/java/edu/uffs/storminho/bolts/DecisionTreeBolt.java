@@ -60,6 +60,7 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2);
 
         instance.setDataset(data);
+        boolean teste = data.checkInstance(instance);
         instance.setClassMissing();
         try {
             result = arv.classifyInstance(instance);

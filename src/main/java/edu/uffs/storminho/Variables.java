@@ -14,22 +14,22 @@ public class Variables {
 
     /* .csv related ==========================================================*/
     //Where the tuple is gonna be split
-    public static final String SPLIT_CHARS = ":";
+    public static final String SPLIT_CHARS = ",";
     //Which tuple's column holds the id field
-    public static final int FIELD_ID = 1;
+    public static final int FIELD_ID = 0;
     //how many columns does the csv have in total
-    public final static int ATTRIBUTES_NUMBER = 12;
+    public final static int ATTRIBUTES_NUMBER = 18;
 
 
     /* TrainingCreator =======================================================*/
     //Name of the output's file
     public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
     //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
-    public static final double SAMPLE_SIZE = 0.1;
+    public static final double SAMPLE_SIZE = 0.5;
     //Quantas duplicatas existem no conjunto de teste
     public static final int TOTAL_DUPLICATAS = 100;
     //Quantos pares tem ao todo
-    public static final int TOTAL_PARES = 604000;
+    public static final int TOTAL_PARES = 54000;
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:
@@ -39,11 +39,19 @@ public class Variables {
     * 8 - Levenshtein Similarity
     * 16 - Grams
     * Ex: public final static int RANKING_METHODS = 2 + 8; means that Jaccard and Levenshtein gonna be used */
-    public final static int RANKING_METHODS = 1 + 2 + 4 + 8 + 16;
+    public final static int RANKING_METHODS = 8;
     //Where Id field will be split
     public static final String ID_SPLIT_CHARS = "-";
     //names used in attributes in arff files
     public static final String ARFF_ATTRIBUTES_PREFIX = "att";
+
+    /*PairGenerator ==========================================================*/
+    //Tamanho máximo de um set pra realizar as combinações
+    public static final int MAX_SET_SIZE = 50;
+
+    /*Debugs and Preparation =================================================*/
+    //if true, will only proccess the necessary to count how many pairs and duplicatas there is in a set
+    public static final boolean COUNT_MODE = false;
 
     //how many fields the weka instances will have
     public static int getFieldsNumber() {

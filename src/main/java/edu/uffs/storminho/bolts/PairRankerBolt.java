@@ -33,6 +33,7 @@ import weka.core.DenseInstance;
 public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
     private StringMetric cosineSim, jaccardSim, jaroWinklerSim, levenshteinSim, qGramsDistanceSim;
     private OutputCollector _collector;
+    private boolean countMode;
 
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector c) {
@@ -42,40 +43,38 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
         levenshteinSim = StringMetrics.levenshtein();
         qGramsDistanceSim = StringMetrics.qGramsDistance();
         _collector = c;
+        countMode = Variables.COUNT_MODE;
     }
 
     @Override
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(0), linha2 = tuple.getString(1);
-
-        // entry test
-    //    System.out.println("[pr] " + linha1 + "\n" + linha2);
-
         String tuple1[] = linha1.split(Variables.SPLIT_CHARS);
         String tuple2[] = linha2.split(Variables.SPLIT_CHARS);
         String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
 
-
-        //for for instance
-        for (int i = 0, j = Variables.FIELD_ID + 1; j < Variables.ATTRIBUTES_NUMBER; j++) {
-            try {
-                if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
-                if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
-                if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
-                if ((8 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
-                if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                for (int x = 0; x < tuple1.length; x++) {
-                    System.out.println("[" + tuple1[x] + "]");
-                    System.out.println("[" + tuple2[x] + "]");
+        if (!countMode) {
+            //for for instance
+            for (int i = 0, j = Variables.FIELD_ID + 1; j < Variables.ATTRIBUTES_NUMBER; j++) {
+                try {
+                    if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
+                    if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
+                    if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
+                    if ((8 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
+                    if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    for (int x = 0; x < tuple1.length; x++) {
+                        System.out.println("[" + tuple1[x] + "]");
+                        System.out.println("[" + tuple2[x] + "]");
+                    }
+                    System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
                 }
-                System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
             }
         }
-
         DenseInstance instance = new DenseInstance(1.0, instanceValues);
+
 
         //out test
 //        System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");

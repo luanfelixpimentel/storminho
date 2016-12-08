@@ -1,5 +1,6 @@
 package edu.uffs.storminho.bolts;
 
+import edu.uffs.storminho.Variables;
 import redis.clients.jedis.Jedis;
 
 import java.util.Map;
@@ -36,7 +37,7 @@ public class WordIndexSaveBolt extends BaseRichBolt implements IRichBolt {
         String lineId = tuple.getString(1);
 
         try {
-            if (!word.matches("^\\s+$")) { //ignores all empty or only-spaces words
+            if (!word.matches("^\\s+$") && jedis.scard(word) < Variables.MAX_SET_SIZE) { //ignores all empty or only-spaces words
                 jedis.sadd(word, lineId); //method to add a value only if he doesn't exist in the set yet
                 _collector.emit(new Values(word, lineId));
 
