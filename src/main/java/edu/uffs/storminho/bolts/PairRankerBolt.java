@@ -58,10 +58,14 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
             //for for instance
             for (int i = 0, j = Variables.FIELD_ID + 1; j < Variables.ATTRIBUTES_NUMBER; j++) {
                 try {
-                    if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j], tuple2[j]);
-                    if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j], tuple2[j]);
-                    if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j], tuple2[j]);
-                    if ((8 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = levenshteinSim.compare(tuple1[j], tuple2[j]);
+                    if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j].trim(), tuple2[j].trim());
+                    if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j].trim(), tuple2[j].trim());
+                    if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j].trim(), tuple2[j].trim());
+                    if ((8 & Variables.RANKING_METHODS) != 0) {instanceValues[i++] = levenshteinSim.compare(tuple1[j].trim(), tuple2[j].trim());
+                    //if(instanceValues[i-1])
+                       // System.err.println(tuple1[j]+ " "+ tuple2[j] +"-------------- " +instanceValues[i-1]);
+                            
+                    }
                     if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
                 } catch (Exception e) {
                     e.printStackTrace();

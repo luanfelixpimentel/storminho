@@ -41,10 +41,10 @@ public class PairGeneratorBolt extends BaseRichBolt implements IRichBolt{
             Set<String> set = jedis.smembers(word);
             for (String toPair : set) {
                 String linha2 = jedis.get(toPair);
-                if (linha1 != null && linha2 != null) _collector.emit(new Values(linha1, linha2));
+                if (linha1 != null && linha2 != null && !linha1.split(",")[0].contains(linha2.split(",")[0])) _collector.emit(new Values(linha1, linha2));
 
                  //out test
-                //  System.out.println("[pg] " + linha1 + "\n" + linha2 + "\n");
+                 // System.out.println("[pg] " + linha1 + "\n" + linha2 + "\n");
             }
         } catch (Exception e) {
             e.printStackTrace();

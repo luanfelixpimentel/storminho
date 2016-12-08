@@ -18,6 +18,7 @@ import org.apache.storm.task.OutputCollector;
 import java.util.Map;
 import java.util.TreeSet;
 import org.apache.storm.task.TopologyContext;
+import weka.core.DenseInstance;
 
 public class CounterBolt extends BaseRichBolt implements IRichBolt {
     OutputCollector _collector;
@@ -34,15 +35,31 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
     public void execute(Tuple tuple) {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2); //Linhas do arquivo csv
         boolean respostaArvore = tuple.getInteger(0) == 1; //Resposta que a árvore do Weka deu pra semelhança calculada entre esse par de linhas
+        DenseInstance instance = (DenseInstance)tuple.getValue(3);
         String id1 = linha1.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID], id2 = linha2.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID]; //IDs das linhas (rec-XX-org/dup)
 
+         if(respostaArvore){
+            // if()
+                     //System.err.println(" comm erro " + linha1 +"  " + linha2);
+                    // System.err.println(instance.value(instance.numAttributes()-1));
+                   //  System.err.println(instance.toString());
+                  //   System.err.println(linha1 +" \n" + linha2);
+                  //   System.err.flush();;
+                 }
         //Nesse if só vai entrar o par que ainda não foi processado e que não seja a mesma linha
-        if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
+        if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2) && (!(id1.contains("dup") && id2.contains("dup")))) {
+            
+               
+                
             if (SharedMethods.isDuplicata(id1, id2)) {
                 if (respostaArvore) vp++;
                 else fn++;
             } else {
-                if (respostaArvore) fp++;
+                if (respostaArvore) {fp++;
+                  //  System.err.println("id1 " + linha1);
+                  //  System.err.println("id2 " + linha2);
+                  //  System.err.println(instance.toString()+ "\n");
+                }
                 else vn++;
             }
             // System.out.println("[c] " + respostaArvore);

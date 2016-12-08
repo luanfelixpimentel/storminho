@@ -45,7 +45,7 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
             data = new Instances(reader);
             data.setClassIndex(data.numAttributes() - 1);
             arv = new J48();
-            arv.setUnpruned(true);
+            arv.setUnpruned(false);
             arv.buildClassifier(data);
             reader.close();
         } catch (Exception ex) {
@@ -60,23 +60,25 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2);
 
         instance.setDataset(data);
-        boolean teste = data.checkInstance(instance);
-        instance.setClassMissing();
+        //boolean teste = data.checkInstance(instance);
+       // instance.setClassMissing();
         try {
             result = arv.classifyInstance(instance);
-            //System.out.println(ins + "\n" + "O que deu : " + result + " e o que tinha que dar " + tuple.getInteger(1));
-            //System.out.println();
+           // System.out.println("\n" + "O que deu : " + result + " e o que tinha que dar " + instance.toString());
+           // System.out.println(linha1 +"------  " + linha2 );
+               
+           // System.out.println();
         } catch (Exception ex) {
             System.out.println(ex);
             Logger.getLogger(DecisionTreeBolt.class.getName()).log(Level.SEVERE, null, ex);
         }
 //        System.out.println("[dt]" + (int)(result + 0.5) + "\n" + linha1 + "\n" + linha2 + "\n");
-        _collector.emit(new Values((int)(result + 0.5), linha1, linha2));
+        _collector.emit(new Values((int)(result + 0.5), linha1, linha2,instance));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("Rª. DecisionTree", "Linha 1", "Linha 2"));
+        declarer.declare(new Fields("Rª. DecisionTree", "Linha 1", "Linha 2", "instace"));
     }
 
     @Override

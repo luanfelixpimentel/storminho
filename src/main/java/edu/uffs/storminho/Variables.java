@@ -18,16 +18,16 @@ public class Variables {
     //Which tuple's column holds the id field
     public static final int FIELD_ID = 0;
     //how many columns does the csv have in total
-    public final static int ATTRIBUTES_NUMBER = 18;
+    public final static int ATTRIBUTES_NUMBER = 17;
     //Arquivo que será usado no LineSpout
-    public final static String DATASET_INPUT = "teste_small_dirty";
+    public final static String DATASET_INPUT = "teste03";
 
 
     /* TrainingCreator =======================================================*/
     //Name of the output's file
     public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
     //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
-    public static final double SAMPLE_SIZE = 0.5;
+    public static final double SAMPLE_SIZE = 0.3;
     //Quantas duplicatas existem no conjunto de teste
     public static final int TOTAL_DUPLICATAS = 100;
     //Quantos pares tem ao todo
