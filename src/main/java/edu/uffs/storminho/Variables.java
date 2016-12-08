@@ -19,6 +19,8 @@ public class Variables {
     public static final int FIELD_ID = 0;
     //how many columns does the csv have in total
     public final static int ATTRIBUTES_NUMBER = 18;
+    //Arquivo que será usado no LineSpout
+    public final static String DATASET_INPUT = "teste_small_dirty";
 
 
     /* TrainingCreator =======================================================*/
