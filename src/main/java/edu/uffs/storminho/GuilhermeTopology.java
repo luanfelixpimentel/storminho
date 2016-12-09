@@ -28,8 +28,8 @@ public class GuilhermeTopology {
     builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("pair-generator");
   //  builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
   // builder.wait(100);
-    builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
-    builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
+  //  builder.setBolt("decisiontree", new DecisionTreeBolt(), 1).shuffleGrouping("pair-ranker");
+  //  builder.setBolt("counter", new CounterBolt(), 1).shuffleGrouping("decisiontree");
 
     Config conf = new Config();
     conf.setDebug(false);

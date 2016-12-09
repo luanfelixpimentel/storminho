@@ -53,7 +53,7 @@ public class Variables {
 
     /*Debugs and Preparation =================================================*/
     //if true, will only proccess the necessary to count how many pairs and duplicatas there is in a set
-    public static final boolean COUNT_MODE = false;
+    public static final boolean COUNT_MODE = true;
 
     //how many fields the weka instances will have
     public static int getFieldsNumber() {
