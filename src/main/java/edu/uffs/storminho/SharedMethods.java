@@ -17,13 +17,7 @@ public class SharedMethods {
         //split the tuples' indexes to separe the identifier
         String[] aSplit = idA.split(Variables.ID_SPLIT_CHARS);
         String[] bSplit = idB.split(Variables.ID_SPLIT_CHARS);
-        boolean flag;
-                
-        flag = aSplit[1].equals(bSplit[1]) && (aSplit[2].equals("org") ^ bSplit[2].equals("org"));
-        //check if the identifier of both are equal and at least one have org
-      //  if(flag)
-      //  System.err.println("----" +idA +"  ---- "+ idB +" flag  " + flag);
-        return flag;
+        return  aSplit[1].equals(bSplit[1]) && (aSplit[2].equals("org") ^ bSplit[2].equals("org"));
     }
 
     //Write the basic header for a .arff file

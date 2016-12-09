@@ -1,8 +1,8 @@
 package edu.uffs.storminho.topologies;
 
-import edu.uffs.storminho.LineSaverBolt;
 import edu.uffs.storminho.LineSpout;
 import edu.uffs.storminho.Variables;
+import edu.uffs.storminho.bolts.LineSaverBolt;
 import edu.uffs.storminho.bolts.PairGeneratorBolt;
 import edu.uffs.storminho.bolts.PairRankerBolt;
 import edu.uffs.storminho.bolts.SplitSentenceBolt;

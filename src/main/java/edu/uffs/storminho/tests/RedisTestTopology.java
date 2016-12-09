@@ -6,6 +6,7 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 
 import edu.uffs.storminho.*;
+import edu.uffs.storminho.bolts.LineSaverBolt;
 import edu.uffs.storminho.bolts.PairGeneratorBolt;
 import edu.uffs.storminho.bolts.SplitSentenceBolt;
 import edu.uffs.storminho.bolts.WordIndexSaveBolt;

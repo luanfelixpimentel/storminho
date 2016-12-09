@@ -1,7 +1,5 @@
 package edu.uffs.storminho.tests;
 
-import edu.uffs.storminho.bolts.CounterBolt;
-import edu.uffs.storminho.bolts.DecisionTreeBolt;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
