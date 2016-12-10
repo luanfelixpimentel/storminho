@@ -11,7 +11,6 @@ package edu.uffs.storminho.bolts;
 import edu.uffs.storminho.Variables;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
@@ -60,25 +59,20 @@ public class DecisionTreeBolt extends BaseRichBolt implements IRichBolt {
         String linha1 = tuple.getString(1), linha2 = tuple.getString(2);
 
         instance.setDataset(data);
-        //boolean teste = data.checkInstance(instance);
-       // instance.setClassMissing();
+        //instance.setClassMissing();
         try {
             result = arv.classifyInstance(instance);
-           // System.out.println("\n" + "O que deu : " + result + " e o que tinha que dar " + instance.toString());
-           // System.out.println(linha1 +"------  " + linha2 );
-               
-           // System.out.println();
         } catch (Exception ex) {
             System.out.println(ex);
             Logger.getLogger(DecisionTreeBolt.class.getName()).log(Level.SEVERE, null, ex);
         }
 //        System.out.println("[dt]" + (int)(result + 0.5) + "\n" + linha1 + "\n" + linha2 + "\n");
-        _collector.emit(new Values((int)(result + 0.5), linha1, linha2,instance));
+        _collector.emit(new Values((int)(result + 0.5), linha1, linha2));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("Rª. DecisionTree", "Linha 1", "Linha 2", "instace"));
+        declarer.declare(new Fields("Rª. DecisionTree", "Linha 1", "Linha 2"));
     }
 
     @Override

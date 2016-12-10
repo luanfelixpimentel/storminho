@@ -1,5 +1,6 @@
-package edu.uffs.storminho;
+package edu.uffs.storminho.bolts;
 
+import edu.uffs.storminho.Variables;
 import java.util.Map;
 
 import redis.clients.jedis.Jedis;
@@ -10,7 +11,6 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
-import org.apache.storm.tuple.Fields;
 
 
 public class LineSaverBolt extends BaseRichBolt implements IRichBolt{
@@ -29,14 +29,8 @@ public class LineSaverBolt extends BaseRichBolt implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
-        String key = tuple.getString(0).split(Variables.SPLIT_CHARS)[Variables.FIELD_ID];
-        String line = tuple.getString(0);
-
-        //Salva no formato [chave = rec0102][toda a linha incluindo o rec]
-        if(!key.equals("")) {
-            jedis.set(key, line);
-            String linha = jedis.get(key);
-        }
+        //Salva no formato [ID][Linha]
+        jedis.set(tuple.getString(0).split(Variables.SPLIT_CHARS)[Variables.FIELD_ID], tuple.getString(0));
     }
 
     @Override

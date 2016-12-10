@@ -1,6 +1,33 @@
 package edu.uffs.storminho;
 
 public class Variables {
+    /* TrainingCreator =======================================================*/
+    //Name of the output's file
+    public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
+    //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
+    public static final double SAMPLE_SIZE = 0.3;
+    //Quantas duplicatas existem no conjunto de teste
+    public static final int TOTAL_DUPLICATAS = 100;
+    //Quantos pares tem ao todo
+    public static final int TOTAL_PARES = 54000;
+    //==========================================================================
+
+    /* .csv related ==========================================================*/
+    //Where the tuple is gonna be split
+    public static final String SPLIT_CHARS = ",";
+    //Which tuple's column holds the id field
+    public static final int FIELD_ID = 0;
+    //how many columns does the csv have in total
+    public final static int ATTRIBUTES_NUMBER = 18;
+    //Arquivo que será usado no LineSpout
+    public final static String DATASET_INPUT = "teste_small_dirty";
+    //==========================================================================
+
+    /*PairGenerator ==========================================================*/
+    //Tamanho máximo de um set pra realizar as combinações
+    public static final int MAX_SET_SIZE = 50;
+    //==========================================================================
+
     /* General ===============================================================*/
     //Path to project folder
     //Don't forget to define an environment variable called "STORMINHO" or something that you want (if you choose another name, you have to change in here
@@ -11,27 +38,7 @@ public class Variables {
     public static final String OUT_PATH = System.getenv("STORMINHO") + "/out/";
     //Path to csv folder
     public static final String CSV_PATH = System.getenv("STORMINHO") + "/csv/";
-
-    /* .csv related ==========================================================*/
-    //Where the tuple is gonna be split
-    public static final String SPLIT_CHARS = ",";
-    //Which tuple's column holds the id field
-    public static final int FIELD_ID = 0;
-    //how many columns does the csv have in total
-    public final static int ATTRIBUTES_NUMBER = 17;
-    //Arquivo que será usado no LineSpout
-    public final static String DATASET_INPUT = "teste03";
-
-
-    /* TrainingCreator =======================================================*/
-    //Name of the output's file
-    public static final String TRAININGSET_OUTPUT_FILE = "trainingSet.arff";
-    //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
-    public static final double SAMPLE_SIZE = 0.3;
-    //Quantas duplicatas existem no conjunto de teste
-    public static final int TOTAL_DUPLICATAS = 100;
-    //Quantos pares tem ao todo
-    public static final int TOTAL_PARES = 54000;
+    //==========================================================================
 
     /*PairRanker =============================================================*/
     /*Select the methods that gonna be used. Use this as a sum with the following numbers:
@@ -46,14 +53,12 @@ public class Variables {
     public static final String ID_SPLIT_CHARS = "-";
     //names used in attributes in arff files
     public static final String ARFF_ATTRIBUTES_PREFIX = "att";
-
-    /*PairGenerator ==========================================================*/
-    //Tamanho máximo de um set pra realizar as combinações
-    public static final int MAX_SET_SIZE = 50;
+    //==========================================================================
 
     /*Debugs and Preparation =================================================*/
     //if true, will only proccess the necessary to count how many pairs and duplicatas there is in a set
-    public static final boolean COUNT_MODE = true;
+    public static boolean COUNT_MODE;
+    //==========================================================================
 
     //how many fields the weka instances will have
     public static int getFieldsNumber() {

@@ -51,47 +51,35 @@ public class PairRankerBolt extends BaseRichBolt implements IRichBolt {
         String linha1 = tuple.getString(0), linha2 = tuple.getString(1);
         String tuple1[] = linha1.split(Variables.SPLIT_CHARS);
         String tuple2[] = linha2.split(Variables.SPLIT_CHARS);
-        String store = "";
         double[] instanceValues = new double[Variables.getFieldsNumber() + 1];
+        String cmp1, cmp2;
 
         if (!countMode) {
             //for for instance
             for (int i = 0, j = Variables.FIELD_ID + 1; j < Variables.ATTRIBUTES_NUMBER; j++) {
-                try {
-                    if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(tuple1[j].trim(), tuple2[j].trim());
-                    if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(tuple1[j].trim(), tuple2[j].trim());
-                    if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(tuple1[j].trim(), tuple2[j].trim());
-                    if ((8 & Variables.RANKING_METHODS) != 0) {instanceValues[i++] = levenshteinSim.compare(tuple1[j].trim(), tuple2[j].trim());
-                    //if(instanceValues[i-1])
-                       // System.err.println(tuple1[j]+ " "+ tuple2[j] +"-------------- " +instanceValues[i-1]);
-                            
-                    }
-                    if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(tuple1[j], tuple2[j]);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    for (int x = 0; x < tuple1.length; x++) {
-                        System.out.println("[" + tuple1[x] + "]");
-                        System.out.println("[" + tuple2[x] + "]");
-                    }
-                    System.out.println(tuple.getString(0) + "\n" + tuple.getString(1) + "\n");
-                }
+                cmp1 = tuple1[j].trim();
+                cmp2 = tuple2[j].trim();
+                if ((1 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = cosineSim.compare(cmp1, cmp2);
+                if ((2 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaccardSim.compare(cmp1, cmp2);
+                if ((4 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = jaroWinklerSim.compare(cmp1, cmp2);
+                if ((8 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = levenshteinSim.compare(cmp1, cmp2);
+                if ((16 & Variables.RANKING_METHODS) != 0) instanceValues[i++] = qGramsDistanceSim.compare(cmp1, cmp2);
             }
         }
         DenseInstance instance = new DenseInstance(1.0, instanceValues);
 
 
         //out test
-//        System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
+        //System.out.println("[pr]" + instance + "\n" + linha1 + "\n" + linha2 + "\n");
 
         _collector.emit(new Values(instance, linha1, linha2));
     }
 
     @Override
-        public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields("weka:Instance", "linha1", "linha2"));
     }
 
     @Override
-    public void cleanup() {
-    }
+    public void cleanup() {}
 }
