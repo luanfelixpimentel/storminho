@@ -36,7 +36,8 @@ public class CounterBolt extends BaseRichBolt implements IRichBolt {
         boolean respostaArvore = tuple.getInteger(0) == 1; //Resposta que a árvore do Weka deu pra semelhança calculada entre esse par de linhas
         String id1 = linha1.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID], id2 = linha2.split(Variables.SPLIT_CHARS)[Variables.FIELD_ID]; //IDs das linhas (rec-XX-org/dup)
 
-        //Nesse if só vai entrar o par que ainda não foi processado e que não seja a mesma linha
+         //Nesse if só vai entrar o par que ainda não foi processado e que não seja a mesma linha
+        if(!(linha1.contains("dup") && linha2.contains("dup")))
         if (set.add(id1 + "_" + id2) && set.add(id2 + "_" + id1) && !id1.equals(id2)) {
             if (SharedMethods.isDuplicata(id1, id2)) {
                 if (respostaArvore) { vp++; }

@@ -7,9 +7,9 @@ public class Variables {
     //Sample Size = Essa porcentagem define quantos pares serão selecionado dentro do conjunto de pares positivos
     public static final double SAMPLE_SIZE = 0.3;
     //Quantas duplicatas existem no conjunto de teste
-    public static final int TOTAL_DUPLICATAS = 100;
+    public static final int TOTAL_DUPLICATAS = 1000;
     //Quantos pares tem ao todo
-    public static final int TOTAL_PARES = 54000;
+    public static final int TOTAL_PARES = 417000;
     //==========================================================================
 
     /* .csv related ==========================================================*/
@@ -20,7 +20,7 @@ public class Variables {
     //how many columns does the csv have in total
     public final static int ATTRIBUTES_NUMBER = 18;
     //Arquivo que será usado no LineSpout
-    public final static String DATASET_INPUT = "teste_small_dirty";
+    public final static String DATASET_INPUT = "teste01";
     //==========================================================================
 
     /*PairGenerator ==========================================================*/

@@ -31,6 +31,7 @@ public class LineSaverBolt extends BaseRichBolt implements IRichBolt{
     public void execute(Tuple tuple) {
         //Salva no formato [ID][Linha]
         jedis.set(tuple.getString(0).split(Variables.SPLIT_CHARS)[Variables.FIELD_ID], tuple.getString(0));
+        long startTime = System.currentTimeMillis();
     }
 
     @Override

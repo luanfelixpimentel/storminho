@@ -28,7 +28,7 @@ public class CreateTrainingTopology {
     builder.setBolt("index-save", new WordIndexSaveBolt(), 1).shuffleGrouping("split-sentence");
     builder.setBolt("pair-generator", new PairGeneratorBolt(), 10).shuffleGrouping("index-save");
     builder.setBolt("pair-ranker", new PairRankerBolt(), 1).shuffleGrouping("pair-generator");
-   builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
+    builder.setBolt("training-creator", new TrainingCreatorBolt(), 1).shuffleGrouping("pair-ranker");
 
     Config conf = new Config();
     conf.setDebug(false);

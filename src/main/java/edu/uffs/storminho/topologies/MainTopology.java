@@ -42,7 +42,7 @@ public class MainTopology {
     else {
       conf.setMaxTaskParallelism(10);
       LocalCluster cluster = new LocalCluster();
-      cluster.submitTopology("storminho-topology", conf, builder.createTopology());
+      cluster.submitTopology("MainTopology", conf, builder.createTopology());
       System.out.println("\n\n----------------------------\nFim do processo da topologia\n----------------------------\n");
     }
   }
